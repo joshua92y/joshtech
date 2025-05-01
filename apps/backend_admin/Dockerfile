@@ -3,7 +3,8 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY ./ ./
+COPY . /app
+COPY ../../packages/shared_schemas /app/packages/shared_schemas
 
 RUN pip install --no-cache-dir -r requirements.txt
 
