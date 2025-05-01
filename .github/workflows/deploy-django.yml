@@ -1,0 +1,27 @@
+# .github/workflows/deploy-django.yml
+name: Deploy Django to Railway
+
+on:
+  push:
+    paths:
+      - 'backend_admin/**'
+      - 'packages/shared_schemas/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend_admin
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Railway CLI
+        uses: railwayapp/cli@v1
+        with:
+          railwayToken: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Deploy Django
+        run: railway up --service django-service
