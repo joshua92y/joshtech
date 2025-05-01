@@ -1,0 +1,23 @@
+{
+  "title": "Permission",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "content_type": {
+      "type": "string"
+    },
+    "codename": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "content_type",
+    "codename"
+  ]
+}

@@ -1,0 +1,88 @@
+# ========================
+# Flutter 관련
+# ========================
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Flutter 관련 빌드 산출물
+**/doc/api/
+**/ios/Flutter/.last_build_id
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+
+# ========================
+# Dart 관련
+# ========================
+*.dart.js
+*.info.json
+*.js
+*.js.map
+
+# ========================
+# VSCode 관련
+# ========================
+.vscode/
+
+# ========================
+# JetBrains IDE 관련 (예: IntelliJ, Android Studio)
+# ========================
+.idea/
+*.iml
+
+# ========================
+# Python / Django 관련
+# ========================
+**/__pycache__/
+**/*.py[cod]
+**/*.pyo
+**/*.pyd
+
+# 가상환경
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+
+# dotenv
+.env
+.env/
+
+# Django SQLite DB (로컬 전용)
+db.sqlite3
+*.sqlite3
+
+# Django 마이그레이션 캐시 (선택)
+**/migrations/__pycache__/
+**/migrations/*.pyc
+
+# Django static/media 임시 파일 (선택)
+staticfiles/
+media/
+
+# ========================
+# 시스템/플랫폼별 무시 파일
+# ========================
+.DS_Store        # macOS
+Thumbs.db        # Windows
+ehthumbs.db
+Desktop.ini
+
+# ========================
+# 프로젝트 내 캐시/출력 디렉토리
+# ========================
+app/output/
+app/history/
+
+# Logs
+logs/
+*.log
+

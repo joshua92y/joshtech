@@ -1,0 +1,19 @@
+{
+  "title": "ContentType",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "app_label": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "app_label",
+    "model"
+  ]
+}
