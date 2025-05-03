@@ -49,6 +49,12 @@ USER appuser
 # Railway는 PORT 환경 변수를 통해 실제 포트를 결정함
 EXPOSE 8000
 
+# PYTHONPATH 설정 추가
+ENV PYTHONPATH="${PYTHONPATH}:/shared-schemas"
+
+# shared-schemas도 소유권 변경
+RUN chown -R appuser:appgroup /app /shared-schemas
+
 # uvicorn으로 애플리케이션 실행
 # Uvicorn은 Railway에 의해 PORT 환경 변수가 설정되면 자동으로 사용함.
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
