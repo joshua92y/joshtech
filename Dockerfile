@@ -1,4 +1,4 @@
-# apps/backend_api/Dockerfile
+# ./Dockerfile
 # 재현성을 위해 특정 마이너 버전 사용 권장
 FROM python:3.11.5-slim
 
@@ -37,7 +37,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # FastAPI 코드 복사
 COPY apps/backend-api /app
 # shared-schemas 복사
-COPY packages/shared-schemas /shared-schemas
+COPY packages/shared_schemas /shared_schemas
 # === 마무리 작업 ===
 # /app 디렉토리 소유권을 non-root 사용자에게 변경
 RUN chown -R appuser:appgroup /app
