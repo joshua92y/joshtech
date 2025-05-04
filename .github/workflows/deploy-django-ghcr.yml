@@ -30,3 +30,7 @@ jobs:
           docker build -t ghcr.io/${{ github.repository_owner }}/joshtech-django:latest \
             -f apps/backend_admin/Dockerfile .
           docker push ghcr.io/${{ github.repository_owner }}/joshtech-django:latest
+
+      # ✅ Render Deploy Hook 호출
+      - name: Deploy to Render via Deploy Hook
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
