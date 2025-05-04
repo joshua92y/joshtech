@@ -1,18 +1,36 @@
-[build]
-# build는 비워두고
+# 앱 이름
+app = "joshtech-api"
+primary_region = "nrt"
 
+# 빌드 설정
+[build]
+  image = "ghcr.io/joshua92y/joshtech-fastapi:latest"
+
+# 배포 시 릴리즈 커맨드 (예: 마이그레이션 등. 필요 없으면 비워둠)
 [deploy]
   release_command = ""
 
+# 환경 변수 설정 (컨테이너 내부에서 사용 가능)
+# 애플리케이션 코드가 PORT 환경 변수를 읽는다면 유용합니다.
 [env]
-  PORT = "8000"
+  PORT = "8000" # FastAPI가 8000번 포트에서 리스닝하도록 설정할 수 있습니다.
+# ✅ 웹 서비스 설정을 위한 [[services]] 섹션 (필수!)
+# 이 섹션은 Fly.io가 어떤 포트로 들어오는 트래픽을 컨테이너의 어떤 포트로 전달할지 정의합니다.
+[[services]]
+  # 이 서비스가 사용할 프로세스 (위의 [processes] 섹션 이름을 따르거나 기본값 "app")
+  processes = ["app"]
 
-[experimental]
-  allowed_public_ports = []
-  auto_rollback = true
+  # ✅ 컨테이너 내부에서 애플리케이션이 리스닝하는 포트 (FastAPI 기본값: 8000)
+  internal_port = 8000
 
-[processes]
-  app = ""
+  # 트래픽 처리를 위한 포트 및 핸들러 설정
+  [[services.ports]]
+    # 외부에서 80번 포트로 들어오는 HTTP 트래픽 처리
+    port = 80
+    handlers = ["http"]
+    # force_https = true # HTTP 요청을 HTTPS로 강제 리다이렉트하려면 주석 해제
 
-# ✨ 아래처럼 이미지 경로 지정
-image = "ghcr.io/joshua92y/joshtech-fastapi:latest"
+  [[services.ports]]
+    # 외부에서 443번 포트로 들어오는 HTTPS 트래픽 처리
+    port = 443
+    handlers = ["tls", "http"] # TLS(HTTPS)와 HTTP 동시 처리
