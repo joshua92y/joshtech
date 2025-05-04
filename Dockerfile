@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # 백엔드 API에 필요한 특정 애플리케이션 코드만 복사
 # 경로는 프로젝트 루트(빌드 컨텍스트) 기준
 # FastAPI 코드 복사
-COPY apps/backend-api /app
+COPY apps/backend_api /app
 # shared-schemas 복사
 COPY packages/shared_schemas /shared_schemas
 # === 마무리 작업 ===
@@ -53,7 +53,7 @@ EXPOSE 8000
 ENV PYTHONPATH="${PYTHONPATH}:/shared-schemas"
 
 # shared-schemas도 소유권 변경
-RUN chown -R appuser:appgroup /app /shared-schemas
+RUN chown -R appuser:appgroup /app /shared_schemas
 
 # uvicorn으로 애플리케이션 실행
 # Uvicorn은 Railway에 의해 PORT 환경 변수가 설정되면 자동으로 사용함.
