@@ -1,0 +1,18 @@
+[build]
+# build는 비워두고
+
+[deploy]
+  release_command = ""
+
+[env]
+  PORT = "8000"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[processes]
+  app = ""
+
+# ✨ 아래처럼 이미지 경로 지정
+image = "ghcr.io/joshua92y/joshtech-fastapi:latest"
