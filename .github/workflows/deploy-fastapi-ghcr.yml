@@ -1,0 +1,37 @@
+# ✅ 워크플로우 이름
+name: Build & Push FastAPI to GHCR
+
+# ✅ 이 워크플로우는 다음 조건 중 하나일 때 실행됩니다:
+# 1. backend_api 또는 shared_schemas 디렉토리에 커밋이 발생했을 때
+# 2. 이 워크플로우 파일 자체가 수정되었을 때
+on:
+  push:
+    paths:
+      - 'apps/backend_api/**'
+      - 'packages/shared_schemas/**'
+      - '.github/workflows/deploy-fastapi-ghcr.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # GitHub Actions 실행 환경 (리눅스 최신)
+
+    steps:
+      # ✅ 1. 현재 저장소 코드를 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # ✅ 2. GHCR(GitHub Container Registry)에 로그인
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ✅ 3. Docker 이미지 빌드 및 GHCR에 푸시
+      - name: Build and push Docker image
+        run: |
+          docker build \
+            -t ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest \
+            -f apps/backend_api/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest

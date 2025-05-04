@@ -1,0 +1,32 @@
+name: Build & Push Django to GHCR
+
+on:
+  push:
+    paths:
+      - 'apps/backend_admin/**'
+      - 'packages/shared_schemas/**'
+      - '.github/workflows/deploy-django-ghcr.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ✅ GitHub 저장소 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # ✅ Docker 로그인 (GHCR)
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ✅ Docker 이미지 빌드 & 푸시
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/joshtech-django:latest \
+            -f apps/backend_admin/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/joshtech-django:latest
