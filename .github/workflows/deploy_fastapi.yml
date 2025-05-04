@@ -1,4 +1,4 @@
-# .github/workflows/deploy-fastapi.yml
+# .github/workflows/deploy_fastapi.yml
 name: Deploy FastAPI to Railway
 
 on:

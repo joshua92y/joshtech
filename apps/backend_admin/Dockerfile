@@ -27,16 +27,16 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Django 앱 복사
-COPY apps/backend-admin /app
+COPY apps/backend_admin /app
 
 # shared-schemas 복사
-COPY packages/shared-schemas /shared-schemas
+COPY packages/shared_schemas /shared_schemas
 
 # PYTHONPATH 설정: shared 모듈을 import 가능하게
-ENV PYTHONPATH="${PYTHONPATH}:/shared-schemas"
+ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
 
 # shared-schemas 권한도 함께 변경
-RUN chown -R appuser:appgroup /app /shared-schemas
+RUN chown -R appuser:appgroup /app /shared_schemas
 
 # non-root 사용자 전환
 USER appuser

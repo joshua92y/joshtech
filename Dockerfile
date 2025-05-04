@@ -50,7 +50,7 @@ USER appuser
 EXPOSE 8000
 
 # PYTHONPATH 설정 추가
-ENV PYTHONPATH="${PYTHONPATH}:/shared-schemas"
+ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
 
 # shared-schemas도 소유권 변경
 RUN chown -R appuser:appgroup /app /shared_schemas
