@@ -57,6 +57,6 @@ jobs:
 
       # ✅ 8. Fly.io 앱으로 원격 배포 (이미지는 푸시되어 있으므로 --image 사용)
       - name: Deploy to Fly.io
-        run: flyctl deploy --image registry.fly.io/joshtech-api:latest --remote-only
+        run: flyctl deploy --image registry.fly.io/joshtech-api:latest --remote-only -a joshtech-api
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
