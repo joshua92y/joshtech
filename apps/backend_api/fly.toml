@@ -29,3 +29,4 @@ primary_region = "nrt"
     interval = "15s"     # 15초마다 체크
     timeout = "2s"       # 2초 안에 응답 없으면 실패
     grace_period = "10s" # 앱 시작 후 첫 체크까지 대기 시간 (필요시 조정)
+    
