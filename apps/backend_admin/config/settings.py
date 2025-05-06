@@ -38,10 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # 아래처럼 전체 모듈 경로로 수정
-    "backend_admin.resume",
-    "backend_admin.projects",
-    "backend_admin.contact",
+    "resume",
+    "projects",
+    "contact",
 ]
 
 MIDDLEWARE = [

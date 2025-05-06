@@ -1,3 +1,4 @@
+#backend_api\app\routers\resumeAPI.py
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
 from Resume import Resume  # 조회용 (기존 유지)
