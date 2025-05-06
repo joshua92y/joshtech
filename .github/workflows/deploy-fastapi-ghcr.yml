@@ -59,11 +59,13 @@ jobs:
       # ✅ 8. Fly.io 앱으로 원격 배포 (이미지는 푸시되어 있으므로 --image 사용)
       - name: Deploy to Fly.io (Tokyo region)
         run: |
+          echo "GITHUB_WORKSPACE is: ${{ env.GITHUB_WORKSPACE }}"
           flyctl deploy \
-            --config apps/backend_api/fly.toml \  # ✅ fly.toml 파일 경로 지정
+            --config ${{ env.GITHUB_WORKSPACE }}/apps/backend_api/fly.toml \
             --image registry.fly.io/joshtech-api:latest \
             --remote-only \
             --primary-region nrt \
             -a joshtech-api
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          GITHUB_WORKSPACE: ${{ github.workspace }} # GITHUB_WORKSPACE를 env로 명시적 전달
