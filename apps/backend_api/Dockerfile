@@ -39,8 +39,8 @@ ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
 # ✅ 비루트 사용자로 전환
 USER appuser
 
-# ✅ 포트 지정 (Railway에서는 PORT 자동 주입)
+# ✅ 포트 지정 (PORT 자동 주입)
 EXPOSE 8000
 
 # ✅ FastAPI 서버 실행
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $PORT"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
