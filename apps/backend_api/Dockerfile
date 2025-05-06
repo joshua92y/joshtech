@@ -27,6 +27,7 @@ COPY requirements.txt .
 # ✅ 패키지 설치
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir pip install pydantic[email]
 
 # ✅ 앱 코드 및 공용 스키마 복사 (루트 기준)
 COPY apps/backend_api /app
