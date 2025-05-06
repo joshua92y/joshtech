@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     # 이미지 용량 최소화
 
 # ✅ Python 실행 환경 설정
-ENV DJANGO_SETTINGS_MODULE=backend_admin.config.settings
+ENV DJANGO_SETTINGS_MODULE=config.settings
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 # .pyc 파일 생성 방지
