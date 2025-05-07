@@ -151,7 +151,7 @@ for model in django_apps.get_models():
     print(f"🔧 generating {py_file.name}...")
     subprocess.run(
         [
-            "datamodel-codegen",
+            sys.executable, "-m", "datamodel_code_generator",
             "--input", str(json_file),
             "--input-file-type", "jsonschema",
             "--output", str(py_file),

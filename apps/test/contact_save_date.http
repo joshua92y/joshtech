@@ -1,0 +1,12 @@
+### Contact Save API 테스트
+POST https://mainapi.joshuatech.dev/api/contact/save/
+Content-Type: application/json
+
+{
+  "name": "홍길동",
+  "email": "hong@example.com",
+  "subject": "테스트 문의",
+  "message": "이메일 저장 테스트 중입니다.",
+  "sent": true,
+  "sent_at": "2025-05-07T16:35:00Z"
+}
