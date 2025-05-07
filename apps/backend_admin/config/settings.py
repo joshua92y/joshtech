@@ -38,7 +38,7 @@ CORS_ALLOWED_HEADERS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = DEBUG
-
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS","https://mainapi.joshuatech.dev")
 if not DEBUG:
     CORS_ALLOWED_ORIGINS = [
         "https://joshuatech.dev",
