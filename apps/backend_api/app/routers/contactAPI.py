@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException
 import os
-from shared_schemas.Contactmessage import ContactMessage
+from Contactmessage import ContactMessage
 import httpx
 from dotenv import load_dotenv
 load_dotenv()
