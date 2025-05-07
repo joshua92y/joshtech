@@ -45,4 +45,4 @@ USER appuser
 EXPOSE 8000
 
 # ✅ Django 서버 실행 (manage.py는 /app 기준)
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8000}"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:${PORT:-8000}"]
