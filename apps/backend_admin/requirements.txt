@@ -45,3 +45,4 @@ tzdata==2025.2
 uvicorn==0.34.2
 psycopg==3.2.7
 psycopg-binary==3.2.7
+dj-database-url==2.3.0
