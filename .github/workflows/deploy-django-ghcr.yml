@@ -6,6 +6,7 @@ on:
       - 'apps/backend_admin/**'
       - 'packages/shared_schemas/**'
       - '.github/workflows/deploy-django-ghcr.yml'
+  workflow_dispatch: # ✅ 수동 실행 버튼 추가
 
 jobs:
   build:
