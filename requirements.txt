@@ -47,3 +47,4 @@ psycopg==3.2.7
 psycopg-binary==3.2.7
 dj-database-url==2.3.0
 django-cors-headers==4.7.0
+requests==2.32.3
