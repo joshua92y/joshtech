@@ -6,12 +6,14 @@ from Contactmessage import ContactMessage
 
 POSTMARK_API_KEY = os.getenv("POSTMARK_API_KEY")
 FROM_EMAIL = os.getenv("FROM_EMAIL")  # Postmark에서 인증한 발신자 이메일
-TO_EMAIL = os.getenv("TO_EMAIL_CONTACT_POSTMARK")      # 수신자 이메일
+TO_EMAIL = os.getenv("TO_EMAIL_CONTACT_POSTMARK")  # 수신자 이메일
 MESSAGE_STREAM = os.getenv("POSTMARK_MESSAGE_STREAM", "outbound")  # 기본 메시지 스트림
+
 
 def convert_text_to_html(text: str) -> str:
     """텍스트 개행을 <br>로 변환"""
     return text.replace("\n", "<br>")
+
 
 def send_email_via_postmark(message: ContactMessage):
     from_email = message.from_email or FROM_EMAIL
@@ -32,7 +34,7 @@ def send_email_via_postmark(message: ContactMessage):
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "X-Postmark-Server-Token": POSTMARK_API_KEY
+        "X-Postmark-Server-Token": POSTMARK_API_KEY,
     }
 
     data = {
@@ -41,7 +43,7 @@ def send_email_via_postmark(message: ContactMessage):
         "Subject": subject,
         "HtmlBody": html_body,
         "TextBody": message.message,
-        "MessageStream": message_stream
+        "MessageStream": message_stream,
     }
 
     try:

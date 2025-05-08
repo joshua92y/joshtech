@@ -1,7 +1,9 @@
-#backend_api\app\main.py
+# backend_api\app\main.py
 from fastapi import FastAPI
 from dotenv import load_dotenv
+import asyncio
 import os
+from utils.ping_flyio import ping_render
 
 # .env 로드
 load_dotenv()
@@ -25,3 +27,13 @@ app.include_router(contactAPI.router)
 @app.get("/")
 def read_root():
     return {"message": "Hello from FastAPI API!"}
+
+
+@app.get("/healthz")
+def health_check():
+    return {"status": "ok"}
+
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(ping_render())
