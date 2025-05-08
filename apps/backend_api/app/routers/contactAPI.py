@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from app.utils.utils_postmark import (
     send_email_via_postmark,
 )  # 🔁 Postmark 전송 유틸 함수 불러오기
+from datetime import datetime
 
 load_dotenv()
 router = APIRouter(prefix="/contact", tags=["Contact"])
@@ -31,8 +32,16 @@ async def send_contact_message(message: ContactMessage):
     # 2. SMTP 전송
     try:
         send_email_via_postmark(message)
+        # 전송 성공 시 sent=True, sent_at=현재시간, failure_reason=None
+        message.sent = True
+        message.sent_at = datetime.now()
+        message.failure_reason = None
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"SMTP failed: {str(e)}")
+        # 전송 실패 시 sent=False, sent_at=None, failure_reason=에러메시지
+        message.sent = False
+        message.sent_at = None
+        message.failure_reason = str(e)
+        # 실패해도 계속 진행 (HTTPException 제거)
 
     # 3. DB 저장 요청
     try:
@@ -44,4 +53,11 @@ async def send_contact_message(message: ContactMessage):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Saving failed: {str(e)}")
 
-    return {"detail": "Contact message sent and saved successfully."}
+    # 4. 응답 메시지 결정
+    if message.sent:
+        return {"detail": "Contact message sent and saved successfully."}
+    else:
+        return {
+            "detail": "Contact message saved but failed to send.",
+            "error": message.failure_reason,
+        }

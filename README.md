@@ -45,3 +45,4 @@ https://joshtech-api.fly.dev/docs #Swagger UI
 
 6.render
 render 에서는 ssl 인증서 자동 발급
+render logs --resources srv-d0ao2a1r0fns73co2n90 로그확인
