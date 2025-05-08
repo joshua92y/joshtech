@@ -5,8 +5,11 @@ import os
 from Contactmessage import ContactMessage
 import httpx
 from dotenv import load_dotenv
+from .utils_postmark import send_email_via_postmark  # 🔁 Postmark 전송 유틸 함수 불러오기
+
 load_dotenv()
 router = APIRouter(prefix="/contact", tags=["Contact"])
+
 DJANGO_API_BASE = os.getenv("DJANGO_API_BASE")
 DJANGO_API_BASE_CONTACT = f"{DJANGO_API_BASE}/api/contact"
 
@@ -20,10 +23,9 @@ async def send_contact_message(message: ContactMessage):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Validation failed: {str(e)}")
 
-    # 2. SMTP 전송 (예시 placeholder)
+    # 2. SMTP 전송
     try:
-        # 여기에 SMTP 코드 삽입
-        pass
+        send_email_via_postmark(message)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"SMTP failed: {str(e)}")
 

@@ -9,9 +9,13 @@ class ContactMessage(models.Model):
 
     sent = models.BooleanField(default=False)
     sent_at = models.DateTimeField(null=True, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     failure_reason = models.TextField(null=True, blank=True)
+
+    # 🔽 Postmark 관련 필드 추가
+    from_email = models.EmailField(null=True, blank=True)
+    to_email = models.EmailField(null=True, blank=True)
+    message_stream = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"[{self.email}] {self.subject}"

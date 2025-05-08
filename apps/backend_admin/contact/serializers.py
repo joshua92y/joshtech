@@ -1,5 +1,3 @@
-# apps/backend_admin/contact/serializers.py
-
 from rest_framework import serializers
 from contact.models import ContactMessage
 
@@ -12,4 +10,7 @@ class ContactMessageSerializer(serializers.ModelSerializer):
             "email",
             "subject",
             "message",
+            "from_email",
+            "to_email",
+            "message_stream",
         ]
