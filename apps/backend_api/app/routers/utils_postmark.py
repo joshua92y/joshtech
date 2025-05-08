@@ -14,8 +14,12 @@ def convert_text_to_html(text: str) -> str:
     return text.replace("\n", "<br>")
 
 def send_email_via_postmark(message: ContactMessage):
-    if not POSTMARK_API_KEY or not FROM_EMAIL or not TO_EMAIL:
-        raise ValueError("Missing POSTMARK_API_KEY, FROM_EMAIL, or TO_EMAIL in environment variables")
+    from_email = message.from_email or FROM_EMAIL
+    to_email = message.to_email or TO_EMAIL
+    message_stream = message.message_stream or MESSAGE_STREAM
+
+    if not POSTMARK_API_KEY or not from_email or not to_email:
+        raise ValueError("Missing POSTMARK_API_KEY, from_email, or to_email")
 
     subject = f"[Portfolio Contact] {message.subject}"
     html_body = f"""
@@ -32,12 +36,12 @@ def send_email_via_postmark(message: ContactMessage):
     }
 
     data = {
-        "From": FROM_EMAIL,
-        "To": TO_EMAIL,
+        "From": from_email,
+        "To": to_email,
         "Subject": subject,
         "HtmlBody": html_body,
         "TextBody": message.message,
-        "MessageStream": MESSAGE_STREAM
+        "MessageStream": message_stream
     }
 
     try:
