@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 import asyncio
 import os
-from utils.ping_flyio import ping_render
+from .utils.ping_flyio import ping_render
 
 # .env 로드
 load_dotenv()
