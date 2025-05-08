@@ -11,4 +11,7 @@ Content-Type: application/json
   "sent_at": null,
   "created_at": null,
   "failure_reason": null,
+  "from_email": "kiki@joshuatech.dev",
+  "to_email": "contact@joshuatech.dev",
+  "message_stream": "mail-outbound"
 }
