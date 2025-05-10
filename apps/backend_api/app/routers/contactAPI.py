@@ -45,9 +45,14 @@ async def send_contact_message(message: ContactMessage):
 
     # 3. DB 저장 요청
     try:
+        # datetime 객체를 ISO 형식 문자열로 변환
+        message_dict = message.dict()
+        if message_dict.get('sent_at'):
+            message_dict['sent_at'] = message_dict['sent_at'].isoformat()
+        
         async with httpx.AsyncClient() as client:
             save_response = await client.post(
-                f"{DJANGO_API_BASE_CONTACT}/save/", json=message.dict()
+                f"{DJANGO_API_BASE_CONTACT}/save/", json=message_dict
             )
         save_response.raise_for_status()
     except Exception as e:
