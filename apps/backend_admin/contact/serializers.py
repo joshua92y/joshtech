@@ -4,7 +4,7 @@ from contact.models import ContactMessage
 
 class ContactMessageSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(read_only=True)
-    sent_at = serializers.DateTimeField(read_only=True)
+    sent_at = serializers.DateTimeField()
 
     class Meta:
         model = ContactMessage
