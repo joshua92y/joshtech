@@ -1,9 +1,8 @@
 # backend_api\app\main.py
 from fastapi import FastAPI
 from dotenv import load_dotenv
-import asyncio
 import os
-from .utils.ping_flyio import ping_render
+from .utils.scheduler import start as start_scheduler
 
 # .env 로드
 load_dotenv()
@@ -36,4 +35,4 @@ def health_check():
 
 @app.on_event("startup")
 async def startup_event():
-    asyncio.create_task(ping_render())
+    start_scheduler()
