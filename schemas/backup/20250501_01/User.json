@@ -1,0 +1,47 @@
+{
+  "title": "User",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "last_login": {
+      "type": "string"
+    },
+    "is_superuser": {
+      "type": "boolean"
+    },
+    "username": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "is_staff": {
+      "type": "boolean"
+    },
+    "is_active": {
+      "type": "boolean"
+    },
+    "date_joined": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "password",
+    "is_superuser",
+    "username",
+    "is_staff",
+    "is_active",
+    "date_joined"
+  ]
+}

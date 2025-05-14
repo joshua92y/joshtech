@@ -1,0 +1,33 @@
+# Python 관련
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# 가상환경 및 설정
+.venv/
+.env
+.env.*
+*.sqlite3
+
+# IDE 및 시스템 파일
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Git 관련
+.git
+.gitignore
+
+# Docker 관련
+Dockerfile
+.dockerignore
+
+# 테스트 및 문서
+#tests/
+docs/
+
+# Flutter 등 기타 빌드 산출물 (필요 시)
+build/

@@ -1,0 +1,36 @@
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Next.js
+.next
+out
+dist
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+
+# Git
+.git
+.gitignore
+.github
+
+# Env
+.env.local
+.env.development
+.env.test
+.env*
+
+# Test & Docs
+__tests__/
+coverage/
+*.md
+
+# CI/CD
+Dockerfile
+.dockerignore

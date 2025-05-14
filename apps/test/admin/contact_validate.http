@@ -1,0 +1,10 @@
+### Contact 유효성 검사 테스트
+POST https://mainapi.joshuatech.dev/api/contact/validate/
+Content-Type: application/json
+
+{
+  "name": "홍길동",
+  "email": "hong@example.com",
+  "subject": "문의드립니다",
+  "message": "안녕하세요, 서비스에 대해 문의드립니다."
+}

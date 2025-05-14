@@ -1,0 +1,93 @@
+# .github/workflows/deploy-nextjs-ghcr.yml
+
+name: Build → GHCR + R2 + Cloudflare Pages Deploy
+
+on:
+  push:
+    paths:
+      - 'apps/frontend/**'
+      - '.github/workflows/deploy-nextjs-ghcr.yml'
+  workflow_dispatch: # ✅ 수동 실행 버튼 추가
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/frontend
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 🟦 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.15.0
+
+      - name: 🗂️ Cache NPM & Next.js build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/.next/cache
+            /home/runner/.cache/next-swc
+          key: Linux-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.js', '**/*.tsx') }}
+          restore-keys: |
+            Linux-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: Preload SWC
+        run: npx next --version
+      
+      - name: 🛠 Build Next.js App
+        run: npm run build
+
+      - name: 🐳 Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: 🐳 Build & Push Docker image to GHCR
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/joshtech-next:latest .
+          docker push ghcr.io/${{ github.repository_owner }}/joshtech-next:latest
+
+      - name: ☁️ Upload static_assets to Cloudflare R2
+        run: |
+          curl -LO https://downloads.rclone.org/rclone-current-linux-amd64.deb
+          sudo dpkg -i rclone-current-linux-amd64.deb
+
+          # rclone 설정 파일 생성
+          mkdir -p ~/.config/rclone
+          cat > ~/.config/rclone/rclone.conf << EOF
+          [remote-r2]
+          type = s3
+          provider = Cloudflare
+          access_key_id = ${{ secrets.R2_ACCESS_KEY }}
+          secret_access_key = ${{ secrets.R2_SECRET_KEY }}
+          endpoint = https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          region = auto
+          acl = public-read
+          EOF
+
+          rclone sync ./static_assets remote-r2:joshtech \
+            --s3-endpoint https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com \
+            --s3-access-key-id ${{ secrets.R2_ACCESS_KEY }} \
+            --s3-secret-access-key ${{ secrets.R2_SECRET_KEY }} \
+            --s3-region auto \
+            --s3-acl public-read \
+            --s3-provider Cloudflare
+
+      - name: 🚀 Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.R2_ACCOUNT_ID }}
+          projectName: joshtech-frontend
+          directory: apps/frontend/out
+          branch: main

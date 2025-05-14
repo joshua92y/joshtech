@@ -1,0 +1,39 @@
+# render.yaml
+# Render 플랫폼에서 Infrastructure as Code 방식으로
+# Django Web Service를 자동 배포 및 구성하기 위한 설정 파일입니다.
+# 위치는 프로젝트 루트에 두어야 Render가 자동 인식합니다.
+
+services:
+  - type: web # 웹 서비스 타입 지정 (Render가 웹 포트 열어줌)
+    name: portfolio-django-admin # Render에서 이 서비스의 이름으로 표시됨
+    env: docker # Docker 환경에서 실행됨
+    plan: free # Render의 무료 요금제 사용
+    buildCommand: ''
+    # 레포지토리 주소 (옵션, 수동 등록 가능)
+    # repo: https://github.com/your-username/my-portfolio
+
+    # Dockerfile 경로 (루트 기준 상대경로로 지정)
+    dockerfilePath: apps/backend_admin/Dockerfile
+
+    # Build Context는 반드시 루트여야 shared-schemas 등을 복사할 수 있음
+    buildFilter:
+      paths:
+        - apps/backend_admin/**
+        - packages/shared_schemas/**
+
+    # 환경 변수 설정
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings # Django 기본 설정 경로 (필요 시 수정)
+
+      - key: DATABASE_URL
+        fromDatabase:
+          name: my-db # Render에서 생성한 데이터베이스 이름
+          property: connectionString # 자동으로 PostgreSQL 연결 문자열 삽입
+
+      - key: PYTHONUNBUFFERED
+        value: '1' # 실시간 로그 출력을 위한 비버퍼 설정
+
+
+    # 보안을 위해 admin 계정이나 비밀 키 등은 반드시 환경 변수로 분리해서 관리해야 합니다.
+    # 절대 Dockerfile이나 settings.py에 하드코딩하지 마세요.

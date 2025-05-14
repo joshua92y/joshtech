@@ -1,0 +1,71 @@
+# ✅ 워크플로우 이름
+name: Build & Deploy FastAPI to GHCR and Fly.io
+
+# ✅ 실행 조건: 다음 디렉토리에 변경이 생기면 실행
+on:
+  push:
+    paths:
+      - 'apps/backend_api/**'
+      - 'packages/shared_schemas/**'
+      - '.github/workflows/deploy-fastapi-ghcr-fly.yml'
+  workflow_dispatch: # ✅ 수동 실행 버튼 추가
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # ✅ GitHub Actions 실행 환경
+
+    steps:
+      # ✅ 1. 현재 GitHub 리포지토리 코드를 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # ✅ 2. GitHub Container Registry (GHCR)에 로그인
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      # ✅ 3. Docker 이미지 빌드 (FastAPI + shared_schemas 포함) 및 GHCR에 푸시
+      - name: Build and push to GHCR
+        run: |
+          docker build \
+            -t ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest \
+            -f apps/backend_api/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest
+
+      # ✅ 4. Fly.io에 사용할 Docker 이미지 태그 변경 (GHCR → Fly용)
+      - name: Tag image for Fly.io
+        run: |
+          docker tag \
+            ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest \
+            registry.fly.io/joshtech-api:latest
+
+      # ✅ 5. Fly.io 레지스트리에 로그인 (FLY_API_TOKEN은 Secrets에 저장해두기)
+      - name: Log in to Fly.io Docker Registry
+        run: echo ${{ secrets.FLY_API_TOKEN }} | docker login registry.fly.io -u x --password-stdin
+
+      # ✅ 6. Fly.io 레지스트리에 Docker 이미지 푸시
+      - name: Push image to Fly.io
+        run: docker push registry.fly.io/joshtech-api:latest
+
+      # ✅ 7. flyctl CLI 도구 설치
+      - name: Install flyctl
+        run: |
+          curl -L https://fly.io/install.sh | sh
+          echo "$HOME/.fly/bin" >> $GITHUB_PATH
+
+      # ✅ 8. Fly.io 앱으로 원격 배포 (이미지는 푸시되어 있으므로 --image 사용)
+      - name: Deploy to Fly.io (Tokyo region)
+        run: |
+          echo "GITHUB_WORKSPACE is: ${{ env.GITHUB_WORKSPACE }}"
+          flyctl deploy \
+            --config ${{ env.GITHUB_WORKSPACE }}/apps/backend_api/fly.toml \
+            --image registry.fly.io/joshtech-api:latest \
+            --remote-only \
+            --primary-region nrt \
+            -a joshtech-api
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          GITHUB_WORKSPACE: ${{ github.workspace }} # GITHUB_WORKSPACE를 env로 명시적 전달

@@ -1,0 +1,32 @@
+# fly.toml
+
+app = "joshtech-api"
+primary_region = "nrt"
+
+# ✅ 가장 중요한 HTTP 서비스 설정
+[http_service]
+  # Dockerfile CMD에서 uvicorn이 실행되는 포트와 일치해야 함
+  internal_port = 8000
+
+  # HTTPS로 강제 리다이렉션 (권장)
+  force_https = true
+
+  # 머신 자동 시작/중지 (개발/테스트 시 유용)
+  auto_stop_machines = true
+  auto_start_machines = true
+
+  # 최소 실행 머신 수 (운영 시 1 이상 권장)
+  min_machines_running = 1 # 개발/테스트 시 0 또는 1
+
+  # Dockerfile CMD를 실행하는 프로세스 그룹
+  processes = ["app"]
+
+  # ✅ 헬스 체크 설정 (매우 중요)
+  # 앱이 /health 같은 특정 경로를 제공하지 않으면 TCP 체크가 간단
+  [[http_service.checks]]
+    type = "tcp"
+    port = 8000          # internal_port와 동일
+    interval = "15s"     # 15초마다 체크
+    timeout = "2s"       # 2초 안에 응답 없으면 실패
+    grace_period = "10s" # 앱 시작 후 첫 체크까지 대기 시간 (필요시 조정)
+    

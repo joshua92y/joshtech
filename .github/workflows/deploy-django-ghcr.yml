@@ -1,0 +1,44 @@
+name: Build & Push Django to GHCR
+
+on:
+  push:
+    paths:
+      - 'apps/backend_admin/**'
+      - 'packages/shared_schemas/**'
+      - '.github/workflows/deploy-django-ghcr.yml'
+  workflow_dispatch: # ✅ 수동 실행 버튼 추가
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ✅ GitHub 저장소 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # ✅ Docker 로그인 (GHCR)
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      # ✅ Docker 이미지 빌드 & 푸시
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/joshtech-django:latest \
+            -f apps/backend_admin/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/joshtech-django:latest
+
+      # ✅ Render Deploy Hook 호출
+      - name: Deploy to Render via Deploy Hook
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+      # ✅ Sentry Release Webhook 호출
+      - name: Notify Sentry of New Release
+        run: |
+          curl https://us.sentry.io/api/hooks/release/builtin/4509302475259904/042fe719f27adc7bcff5677348f1412b356aa14f42d8ffecb082c4ff6d412264/ \
+            -X POST \
+            -H 'Content-Type: application/json' \
+            -d '{"version": "${{ github.sha }}"}'

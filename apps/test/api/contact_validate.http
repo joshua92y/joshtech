@@ -1,0 +1,13 @@
+### 📤 FastAPI 서버에 문의 메일 전송 테스트
+POST https://joshtech-api.fly.dev/contact/send
+Content-Type: application/json
+
+{
+  "name": "홍길동",
+  "email": "gildong@example.com",
+  "subject": "문의드립니다",
+  "message": "이메일 테스트 메시지입니다.",
+  "from_email": "kiki@joshuatech.dev",
+  "to_email": "wlsgh112233@naver.com",
+  "message_stream": "mail-outbound"
+}
