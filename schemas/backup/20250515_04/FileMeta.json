@@ -1,0 +1,55 @@
+{
+  "title": "FileMeta",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "user": {
+      "type": "integer",
+      "title": "user"
+    },
+    "key": {
+      "type": "string",
+      "title": "key"
+    },
+    "filename": {
+      "type": "string",
+      "title": "filename"
+    },
+    "content_type": {
+      "type": "string",
+      "title": "content type"
+    },
+    "size": {
+      "type": "integer",
+      "title": "size"
+    },
+    "uploaded_at": {
+      "type": "string",
+      "title": "uploaded at",
+      "format": "date-time"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "title": "is deleted",
+      "default": false
+    },
+    "deleted_at": {
+      "type": "string",
+      "title": "deleted at",
+      "format": "date-time",
+      "nullable": true
+    }
+  },
+  "required": [
+    "user",
+    "key",
+    "filename",
+    "content_type",
+    "size",
+    "uploaded_at",
+    "is_deleted"
+  ]
+}

@@ -10,9 +10,13 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# ✅ Chromium 설치
+RUN apt-get update && apt-get install -y chromium-browser fonts-liberation
+
 # ✅ 파이썬 실행 환경 설정
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV HTI_BROWSER_PATH=/usr/bin/chromium
 
 # ✅ 작업 디렉토리 지정
 WORKDIR /app

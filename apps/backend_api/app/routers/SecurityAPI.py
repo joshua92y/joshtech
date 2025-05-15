@@ -1,5 +1,6 @@
+# backend_api/app/routers/SecurityAPI.py
 import os
-from fastapi import APIRouter, FastAPI, Request, Response, Cookie, status, HTTPException
+from fastapi import APIRouter, Request, Cookie, status, HTTPException
 from fastapi.responses import JSONResponse
 
 router = APIRouter()

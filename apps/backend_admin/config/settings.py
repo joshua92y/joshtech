@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from urllib.parse import urlparse
+from datetime import timedelta
 
 # 🟡 환경 변수 로드
 load_dotenv()
@@ -48,7 +49,10 @@ INSTALLED_APPS = [
     "projects",
     "contact",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
+    "R2_Storage",
+    "accounts",
 ]
 
 # 🧱 미들웨어
@@ -63,6 +67,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+# REST_FRAMEWORK 설정
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
 
 # 🌐 URL 설정
 ROOT_URLCONF = "config.urls"
@@ -87,17 +97,26 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # 🗄 DB 설정 (PostgreSQL)
-tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": tmpPostgres.path[1:],
-        "USER": tmpPostgres.username,
-        "PASSWORD": tmpPostgres.password,
-        "HOST": tmpPostgres.hostname,
-        "PORT": tmpPostgres.port or 5432,
+check = True
+if check:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": tmpPostgres.path[1:],
+            "USER": tmpPostgres.username,
+            "PASSWORD": tmpPostgres.password,
+            "HOST": tmpPostgres.hostname,
+            "PORT": tmpPostgres.port or 5432,
+        }
+    }
 
 # 🔐 비밀번호 검증
 AUTH_PASSWORD_VALIDATORS = [
@@ -109,6 +128,27 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+
+# JWT 설정
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_BLACKLIST_ENABLED": True,
+}
+INTERNAL_API_KEY = os.getenv(
+    "INTERNAL_API_KEY",
+    "a601d47cad3a512c79ed67c44f396dbc330263f2d125a8fc32a978233acf4a0b",
+)
+FASTAPI_CACHE_INVALIDATE_URL = os.getenv(
+    "FASTAPI_CACHE_INVALIDATE_URL",
+    "https://api.joshuatech.dev/internal/cache-invalidate-role/",
+)
 # 🌍 국제화
 LANGUAGE_CODE = "ko-kr"
 TIME_ZONE = "Asia/Seoul"

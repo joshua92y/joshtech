@@ -24,7 +24,12 @@ pytest tests/ #api 테스트
    ->vs code 인터프린터 파이썬 가상환경으로 변경 Python: Select Interpreter → admin-env
 
 2.Django
-
+python manage.py startapp myapp #신규앱 생성
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser #슈퍼개정 생성
+python manage.py dbshell
+python manage.py flush #DB 초기화
 3.FastAPI
 
 4.sync-schema (django와 fastapi 스키마 연동을 위한 자동화 프로그램)
@@ -57,3 +62,7 @@ npm run lint
 npm run dev
 npx prettier --write .
 npm run lint --fix
+
+8.Chromium
+choco install chromium --pre #power shell
+C:\Program Files\Chromium\Application\chrome.exe 설치경로

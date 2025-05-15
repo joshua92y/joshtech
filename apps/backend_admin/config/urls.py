@@ -8,14 +8,11 @@ def health_check(request):
     return JsonResponse({"status": "ok"})
 
 
-def crash_test(request):
-    division_by_zero = 1 / 0  # 일부러 에러
-
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/resume/", include("resume.urls")),
     path("api/contact/", include("contact.urls")),
     path("healthz/", health_check, name="health_check"),
-    path("sentry-debug/", crash_test, name="crash_test"),
+    path("api/files/", include("R2_Storage.urls")),
+    path("api/accounts/", include("accounts.urls")),
 ]

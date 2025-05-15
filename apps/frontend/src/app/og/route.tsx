@@ -1,3 +1,4 @@
+//src/app/og/route.tsx
 import { ImageResponse } from "next/og";
 import { baseURL } from "@/app/resources";
 import { person } from "@/app/resources/content";
