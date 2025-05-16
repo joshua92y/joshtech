@@ -3,8 +3,9 @@ import sys
 import django
 import subprocess
 import json
+import uuid
+import datetime
 from pathlib import Path
-from datetime import datetime
 from django.apps import apps as django_apps
 
 # 📁 경로 설정
@@ -62,6 +63,14 @@ TYPE_MAP = {
     "ManyToManyField": "array",
 }
 
+
+# 안전한 기본값 직렬화 함수
+def safe_default(val):
+    if isinstance(val, (uuid.UUID, datetime.datetime, datetime.date, datetime.time)):
+        return str(val)
+    return val
+
+
 # 대상 앱 필터링
 PROJECT_APPS_BASE = str(BACKEND_PATH)
 TARGET_APPS = [
@@ -72,10 +81,14 @@ TARGET_APPS = [
 print(f"[🎯] 대상 앱 자동 감지됨: {TARGET_APPS}")
 
 # 백업 디렉토리 생성
-today = datetime.today().strftime("%Y%m%d")
+today = datetime.datetime.today().strftime("%Y%m%d")
 existing = list(BACKUP_ROOT.glob(f"{today}_*"))
 next_index = (
-    max([int(folder.name.split("_")[1]) for folder in existing if "_" in folder.name], default=0) + 1
+    max(
+        [int(folder.name.split("_")[1]) for folder in existing if "_" in folder.name],
+        default=0,
+    )
+    + 1
 )
 backup_dir = BACKUP_ROOT / f"{today}_{next_index:02}"
 backup_dir.mkdir(parents=True, exist_ok=True)
@@ -99,7 +112,7 @@ for model in django_apps.get_models():
         json_type = TYPE_MAP.get(internal_type, "string")
         field_schema = {
             "type": json_type,
-            "title": f.verbose_name or f.name
+            "title": str(f.verbose_name or f.name),  # 💡 __proxy__ → str
         }
 
         # 날짜/시간 포맷
@@ -107,7 +120,7 @@ for model in django_apps.get_models():
             field_schema["format"] = {
                 "DateTimeField": "date-time",
                 "DateField": "date",
-                "TimeField": "time"
+                "TimeField": "time",
             }[internal_type]
 
         # choices → enum
@@ -117,7 +130,7 @@ for model in django_apps.get_models():
         # default
         if f.has_default() and f.default is not None:
             try:
-                field_schema["default"] = f.get_default()
+                field_schema["default"] = safe_default(f.get_default())
             except Exception:
                 pass
 
@@ -127,8 +140,13 @@ for model in django_apps.get_models():
 
         fields[f.name] = field_schema
 
-        # 필수 필드 판단
-        if not f.null and not f.blank and not getattr(f, "auto_now", False) and not getattr(f, "auto_now_add", False):
+        # 필수 필드
+        if (
+            not f.null
+            and not f.blank
+            and not getattr(f, "auto_now", False)
+            and not getattr(f, "auto_now_add", False)
+        ):
             required.append(f.name)
 
     schema = {
@@ -138,25 +156,33 @@ for model in django_apps.get_models():
         "required": required,
     }
 
-    # 파일 저장
+    # 파일 경로
     json_file = SCHEMA_PATH / f"{model_name}.json"
     py_file = SHARED_PATH / f"{model_name}.py"
     backup_file = backup_dir / f"{model_name}.json"
 
+    # 저장 (default=str 안전하게 추가)
     with open(json_file, "w", encoding="utf-8") as f:
-        json.dump(schema, f, indent=2, ensure_ascii=False)
+        json.dump(schema, f, indent=2, ensure_ascii=False, default=str)
     with open(backup_file, "w", encoding="utf-8") as f:
-        json.dump(schema, f, indent=2, ensure_ascii=False)
+        json.dump(schema, f, indent=2, ensure_ascii=False, default=str)
 
     print(f"🔧 generating {py_file.name}...")
     subprocess.run(
         [
-            sys.executable, "-m", "datamodel_code_generator",
-            "--input", str(json_file),
-            "--input-file-type", "jsonschema",
-            "--output", str(py_file),
+            sys.executable,
+            "-m",
+            "datamodel_code_generator",
+            "--input",
+            str(json_file),
+            "--input-file-type",
+            "jsonschema",
+            "--output",
+            str(py_file),
             "--use-default",
             "--field-constraints",
-            "--use-title-as-name"
+            "--use-title-as-name",
+            "--encoding",
+            "utf-8",
         ]
     )

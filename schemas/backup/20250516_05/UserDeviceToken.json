@@ -1,0 +1,53 @@
+{
+  "title": "UserDeviceToken",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "user": {
+      "type": "integer",
+      "title": "user"
+    },
+    "uuid": {
+      "type": "string",
+      "title": "uuid",
+      "default": "39474555-ba1a-40c2-9181-0d22083a5003"
+    },
+    "jti": {
+      "type": "string",
+      "title": "jti"
+    },
+    "device_name": {
+      "type": "string",
+      "title": "device name",
+      "nullable": true
+    },
+    "created_at": {
+      "type": "string",
+      "title": "created at",
+      "format": "date-time",
+      "default": "2025-05-16 05:33:27.560991+00:00"
+    },
+    "last_used_at": {
+      "type": "string",
+      "title": "last used at",
+      "format": "date-time",
+      "default": "2025-05-16 05:33:27.561015+00:00"
+    },
+    "is_active": {
+      "type": "boolean",
+      "title": "is active",
+      "default": true
+    }
+  },
+  "required": [
+    "user",
+    "uuid",
+    "jti",
+    "created_at",
+    "last_used_at",
+    "is_active"
+  ]
+}

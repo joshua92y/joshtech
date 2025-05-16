@@ -1,6 +1,8 @@
 # apps/accounts/views.py
 
 from django.contrib.auth import authenticate, get_user_model
+from django.utils import timezone
+import logging
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,20 +13,22 @@ from rest_framework_simplejwt.token_blacklist.models import (
     OutstandingToken,
     BlacklistedToken,
 )
-import requests
 
-from accounts.token import create_device_token, get_active_device_count_and_list
+from accounts.token import issue_device_jwt, get_active_device_count_and_list
 from accounts.models import UserDeviceToken
 from accounts.serializers import CustomTokenRefreshSerializer
+from accounts.utils.auth import validate_token_and_device
+from config.settings import MAX_DEVICE_COUNT
 
 User = get_user_model()
-
-MAX_DEVICE_COUNT = 3
+logger = logging.getLogger(__name__)
 
 
 class CustomTokenRefreshView(TokenRefreshView):
     """
-    ✅ RefreshToken → AccessToken 재발급 (uuid, user_id 클레임 유지)
+    POST: JWT 리프레시 토큰을 이용하여 새로운 액세스 토큰 발급
+
+    기존 RefreshToken의 커스텀 클레임(uuid, user_id 등)을 포함하여 AccessToken을 반환합니다.
     """
 
     serializer_class = CustomTokenRefreshSerializer
@@ -32,7 +36,11 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class LoginView(APIView):
     """
-    ✅ 사용자 로그인 + 디바이스 UUID별 토큰 발급 / 디바이스 수 초과 여부 확인
+    POST: 사용자 로그인 및 디바이스 기반 JWT 토큰 발급
+
+    - username, password, device_name을 받아 인증 수행
+    - 유효할 경우 access, refresh, uuid를 포함한 토큰 정보 반환
+    - 등록된 디바이스가 MAX_DEVICE_COUNT를 초과하면 403 반환
     """
 
     permission_classes = [AllowAny]
@@ -44,11 +52,14 @@ class LoginView(APIView):
 
         user = authenticate(request, username=username, password=password)
         if not user:
-            return Response({"error": "인증 실패"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {"detail": "인증 실패"}, status=status.HTTP_401_UNAUTHORIZED
+            )
 
-        # ✅ 디바이스 수 초과 여부 확인
-        device_count, device_list = get_active_device_count_and_list(user)
-        if device_count >= MAX_DEVICE_COUNT:
+        # ✅ 토큰 발급 및 등록 (디바이스 수 초과 시 내부에서 처리)
+        token_data = issue_device_jwt(user, device_name=device_name)
+        if token_data is None:
+            device_count, device_list = get_active_device_count_and_list(user)
             return Response(
                 {
                     "error": f"디바이스는 최대 {MAX_DEVICE_COUNT}개까지 허용됩니다.",
@@ -56,42 +67,30 @@ class LoginView(APIView):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
-
-        # ✅ 토큰 발급 및 등록
-        token_data = create_device_token(user, device_name=device_name)
         return Response(token_data, status=status.HTTP_200_OK)
 
 
 class TokenVerifyView(APIView):
     """
-    ✅ AccessToken 검증 + UUID 확인 + Role 정보 포함 반환
+    GET: 전달된 AccessToken 및 uuid를 검증하고 사용자 정보 반환
+
+    - 유효한 경우 사용자 ID, username, 디바이스 uuid, role 정보 포함
+    - 잘못된 토큰 또는 uuid는 401 에러 반환
     """
 
     permission_classes = [AllowAny]
 
     def get(self, request):
-        auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Bearer "):
-            return Response({"detail": "Authorization 헤더 누락"}, status=401)
-
-        token_str = auth_header.removeprefix("Bearer ").strip()
-
         try:
-            token = AccessToken(token_str)
-            uuid = token.get("uuid")
-            user_id = token.get("user_id") or token.get("sub")
+            user_id, uuid, _ = validate_token_and_device(request)
 
-            if not uuid or not user_id:
-                return Response({"detail": "유효하지 않은 토큰"}, status=401)
-
-            if not UserDeviceToken.objects.filter(
-                user_id=user_id, uuid=uuid, is_active=True
-            ).exists():
-                return Response({"detail": "UUID 인증 실패"}, status=401)
+            # 최근 사용 갱신
+            UserDeviceToken.objects.filter(user_id=user_id, uuid=uuid).update(
+                last_used_at=timezone.now()
+            )
 
             user = User.objects.select_related("role").get(id=user_id)
             role = user.role
-
             role_data = (
                 {
                     "name": role.name,
@@ -114,40 +113,35 @@ class TokenVerifyView(APIView):
             )
 
         except Exception as e:
-            return Response(
-                {"detail": "토큰 오류", "error": str(e)},
-                status=401,
-            )
+            return Response({"detail": str(e)}, status=401)
 
 
 class LogoutDeviceView(APIView):
     """
-    ✅ 단일 디바이스 로그아웃 API
-    - 주어진 uuid에 해당하는 refresh token을 블랙리스트 처리
-    - 해당 디바이스 토큰을 soft-delete 처리 (is_active=False)
+    POST: 현재 인증된 사용자의 특정 디바이스 로그아웃
+
+    - uuid를 기반으로 해당 디바이스의 JWT를 블랙리스트 처리하고 비활성화
+    - 유효하지 않은 uuid는 404 반환
     """
 
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         uuid = request.data.get("uuid")
-        if not uuid:
-            return Response({"detail": "uuid가 필요합니다."}, status=400)
+        if not uuid or str(uuid).strip() == "":
+            return Response({"detail": "유효한 uuid가 필요합니다."}, status=400)
 
         try:
-            # 해당 user와 uuid에 해당하는 디바이스 찾기
             device_token = UserDeviceToken.objects.get(
                 user=request.user, uuid=uuid, is_active=True
             )
 
-            # 🔒 토큰 블랙리스트 처리
             try:
                 outstanding = OutstandingToken.objects.get(jti=device_token.jti)
                 BlacklistedToken.objects.get_or_create(token=outstanding)
             except OutstandingToken.DoesNotExist:
-                pass  # 이미 만료된 경우는 무시
+                logger.warning(f"토큰이 이미 만료되었거나 존재하지 않음: {uuid}")
 
-            # 💤 Soft-delete 처리
             device_token.is_active = False
             device_token.save()
 
@@ -159,12 +153,32 @@ class LogoutDeviceView(APIView):
             return Response({"detail": "해당 디바이스를 찾을 수 없습니다."}, status=404)
 
 
-def notify_role_update(user_id):
-    try:
-        requests.post(
-            "https://api.yourfastapi.com/internal/cache-invalidate/",
-            json={"user_id": user_id},
-            headers={"Authorization": f"Bearer {settings.INTERNAL_API_KEY}"},
-        )
-    except requests.RequestException:
-        pass  # 실패 시 재시도 로직 고려
+class DeviceListView(APIView):
+    """
+    GET: 현재 사용 중인 디바이스 정보 조회
+
+    - AccessToken 및 uuid를 검증하여 단일 디바이스 정보를 반환
+    - 디바이스 uuid, 이름, 마지막 사용 시간 포함
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            _, _, device = validate_token_and_device(request)
+
+            return Response(
+                {
+                    "device_count": 1,
+                    "devices": [
+                        {
+                            "uuid": str(device.uuid),
+                            "device_name": device.device_name,
+                            "last_used_at": device.last_used_at,
+                        }
+                    ],
+                },
+                status=200,
+            )
+        except Exception as e:
+            return Response({"detail": str(e)}, status=401)

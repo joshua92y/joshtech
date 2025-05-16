@@ -33,28 +33,42 @@ CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_TRUSTED_ORIGINS = os.getenv(
-    "CSRF_TRUSTED_ORIGINS", "https://mainapi.joshuatech.dev"
+    "CSRF_TRUSTED_ORIGINS",
+    "https://mainapi.joshuatech.dev,http://127.0.0.1:8000",
 ).split(",")
+
+# 🧩 모델 설정
+AUTH_USER_MODEL = "accounts.User"
 
 # 🧩 앱 정의
 INSTALLED_APPS = [
+    # Admin UI 개선
     "jazzmin",
+    # Django 기본 앱
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # 사용자 앱
     "resume",
     "projects",
     "contact",
+    "accounts",
+    # DRF 및 인증
     "rest_framework",
+    "rest_framework_simplejwt",  # ✅ 추가 권장
     "rest_framework_simplejwt.token_blacklist",
+    # 기타 유틸
     "corsheaders",
     "R2_Storage",
-    "accounts",
+    # 선택적 기능
+    "drf_spectacular",
+    "drf_spectacular_sidecar",  # Swagger/OpenAPI 문서용
+    # "taggit",  # 태그 기능
+    # "storages",  # S3, R2 연동
 ]
-
 # 🧱 미들웨어
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -72,6 +86,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # 🌐 URL 설정
@@ -145,6 +160,8 @@ INTERNAL_API_KEY = os.getenv(
     "INTERNAL_API_KEY",
     "a601d47cad3a512c79ed67c44f396dbc330263f2d125a8fc32a978233acf4a0b",
 )
+MAX_DEVICE_COUNT = int(os.getenv("MAX_DEVICE_COUNT", 3))
+
 FASTAPI_CACHE_INVALIDATE_URL = os.getenv(
     "FASTAPI_CACHE_INVALIDATE_URL",
     "https://api.joshuatech.dev/internal/cache-invalidate-role/",

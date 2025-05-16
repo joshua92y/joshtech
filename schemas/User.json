@@ -1,0 +1,70 @@
+{
+  "title": "User",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "password": {
+      "type": "string",
+      "title": "비밀번호"
+    },
+    "last_login": {
+      "type": "string",
+      "title": "마지막 로그인",
+      "format": "date-time",
+      "nullable": true
+    },
+    "is_superuser": {
+      "type": "boolean",
+      "title": "최상위 사용자 권한",
+      "default": false
+    },
+    "username": {
+      "type": "string",
+      "title": "사용자 이름"
+    },
+    "first_name": {
+      "type": "string",
+      "title": "이름"
+    },
+    "last_name": {
+      "type": "string",
+      "title": "성"
+    },
+    "email": {
+      "type": "string",
+      "title": "이메일 주소"
+    },
+    "is_staff": {
+      "type": "boolean",
+      "title": "스태프 권한",
+      "default": false
+    },
+    "is_active": {
+      "type": "boolean",
+      "title": "활성",
+      "default": true
+    },
+    "date_joined": {
+      "type": "string",
+      "title": "등록일",
+      "format": "date-time",
+      "default": "2025-05-16 08:12:27.631796+00:00"
+    },
+    "role": {
+      "type": "integer",
+      "title": "role",
+      "nullable": true
+    }
+  },
+  "required": [
+    "password",
+    "is_superuser",
+    "username",
+    "is_staff",
+    "is_active",
+    "date_joined"
+  ]
+}
