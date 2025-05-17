@@ -229,43 +229,43 @@ const gallery = {
   // These are placeholder images, replace with your own
   images: [
     {
-      src: "/images/gallery/horizontal-1.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/horizontal-2.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/horizontal-3.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/horizontal-4.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-1.jpg",
-      alt: "image",
+      src: "/images/gallery/avarice.jpg",
+      alt: "avarice",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/vertical-2.jpg",
-      alt: "image",
-      orientation: "vertical",
+      src: "/images/gallery/HanRiver_Twilight.jpg",
+      alt: "HanRiver_Twilight",
+      orientation: "horizontal",
     },
     {
-      src: "/images/gallery/vertical-3.jpg",
-      alt: "image",
-      orientation: "vertical",
+      src: "/images/gallery/Jeongdongjin_sunrise.jpg",
+      alt: "Jeongdongjin_sunrise",
+      orientation: "horizontal",
     },
     {
-      src: "/images/gallery/vertical-4.jpg",
-      alt: "image",
+      src: "/images/gallery/futsal.jpg",
+      alt: "futsal",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/lunar_eclipse.jpg",
+      alt: "lunar_eclipse",
+      orientation: "square",
+    },
+    {
+      src: "/images/gallery/campfire.jpg",
+      alt: "campfire",
+      orientation: "square",
+    },
+    {
+      src: "/images/gallery/neon_crew.jpg",
+      alt: "neon_crew",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/avatar_1.jpg",
+      alt: "avatar_1",
       orientation: "vertical",
     },
   ],

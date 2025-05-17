@@ -6,8 +6,10 @@ from accounts.models import Role, User, UserDeviceToken
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_display = ["name", "can_upload", "can_manage_users", "can_view_logs"]
-    list_filter = ["can_upload", "can_manage_users"]
+    list_display = [
+        "name",
+    ]  # "can_upload", "can_manage_users", "can_view_logs"
+    # list_filter = ["can_upload", "can_manage_users"]
     search_fields = ["name"]
 
 

@@ -51,7 +51,7 @@
       "type": "string",
       "title": "등록일",
       "format": "date-time",
-      "default": "2025-05-17 06:03:48.457819+00:00"
+      "default": "2025-05-17 05:59:59.559001+00:00"
     },
     "role": {
       "type": "integer",
