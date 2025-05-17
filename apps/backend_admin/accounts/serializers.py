@@ -10,6 +10,12 @@ from rest_framework import serializers
 from accounts.token import issue_device_jwt, get_active_device_count_and_list
 from config.settings import MAX_DEVICE_COUNT
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+
+
+UserModel = get_user_model()
+
 
 class DeviceTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
@@ -50,3 +56,27 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 
         data["access"] = str(access)
         return data
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    """
+    ✅ 사용자 회원가입용 시리얼라이저 (FastAPI ↔ Django 스키마 호환)
+
+    - FastAPI에서 전달받은 회원가입 데이터(username, email, password, role)를 검증 및 처리
+    - Django의 User 모델과 연동되어 .save() 시 create_user()를 호출해 저장
+    - Pydantic 기반 shared_schemas.User 모델과 필드 구조 일치
+    - 비밀번호는 write_only로 설정되고 Django의 비밀번호 유효성 검증기를 사용함
+    """
+
+    password = serializers.CharField(write_only=True, validators=[validate_password])
+
+    class Meta:
+        model = UserModel
+        fields = ["username", "email", "password", "role"]  # shared 스키마와 일치
+        extra_kwargs = {
+            "email": {"required": True},
+            "role": {"required": False},
+        }
+
+    def create(self, validated_data):
+        return UserModel.objects.create_user(**validated_data)

@@ -44,9 +44,9 @@ class Role(models.Model):
     description = models.TextField(blank=True)
 
     # 💡 권한 예시 필드들 (필요시 추가 확장 가능)
-    can_upload = models.BooleanField(default=False)
-    can_view_logs = models.BooleanField(default=False)
-    can_manage_users = models.BooleanField(default=False)
+    # can_upload = models.BooleanField(default=False)
+    # can_view_logs = models.BooleanField(default=False)
+    # can_manage_users = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
