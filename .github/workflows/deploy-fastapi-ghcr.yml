@@ -48,15 +48,18 @@ jobs:
 
       # ✅ 4. docker-compose.yml + traefik 설정 파일들을 서버로 복사
       - name: Upload compose files to OCI
-        uses: appleboy/scp-action@v0.1.3
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
           username: ubuntu
           key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          port: 22
           source: |
-            ./infra/oci/docker-compose.yml
-            ./infra/oci/traefik/traefik.yml
+            infra/oci/docker-compose.yml
+            infra/oci/traefik/traefik.yml
           target: ~/deploy/joshtech/
+          strip_components: 2
+          overwrite: true
           debug: true
 
       # ✅ 5. OCI 서버에 SSH 접속 후 docker compose 실행
