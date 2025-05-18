@@ -54,9 +54,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
           source: |
-            infra/oci/docker-compose.yml
-            infra/oci/traefik/traefik.yml
+            ./infra/oci/docker-compose.yml
+            ./infra/oci/traefik/traefik.yml
           target: ~/deploy/joshtech/
+          debug: true
 
       # ✅ 5. OCI 서버에 SSH 접속 후 docker compose 실행
       - name: Deploy to OCI via SSH (Compose v2)
