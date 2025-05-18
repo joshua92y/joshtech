@@ -1,50 +1,46 @@
-# apps/backend_api/Dockerfile
+# ✅ 1. Python 슬림 이미지 사용 (빌드 속도/용량 최적화)
+FROM python:3.11-slim
 
-# ✅ Python 3.11.5 슬림 베이스 이미지
-FROM python:3.11.5-slim
-
-# ✅ 시스템 의존성 설치
-RUN apt-get update && apt-get install -y \
+# ✅ 2. 필수 시스템 패키지 설치 (no-recommends로 경량화)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     build-essential \
+    chromium \
+    fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
-# ✅ Chromium 설치
-RUN apt-get update && apt-get install -y chromium-browser fonts-liberation
+# ✅ 3. Chromium 경로 통일
+RUN ln -sf $(which chromium || which chromium-browser) /usr/bin/chromium
 
-# ✅ 파이썬 실행 환경 설정
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV HTI_BROWSER_PATH=/usr/bin/chromium
+# ✅ 4. 환경 변수 설정
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    HTI_BROWSER_PATH=/usr/bin/chromium
 
-# ✅ 작업 디렉토리 지정
+# ✅ 5. 작업 디렉토리 및 사용자 생성
 WORKDIR /app
-
-# ✅ 전용 사용자 추가 (보안 강화)
 RUN groupadd -r appgroup && \
     useradd -r -g appgroup -d /app -s /sbin/nologin -c "Docker image user" appuser
 
-# ✅ requirements.txt만 복사 (캐시 최적화)
+# ✅ 6. requirements.txt만 복사 → 캐시 최적화
 COPY requirements.txt .
 
-# ✅ 패키지 설치
+# ✅ 7. pip 설치
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir "pydantic[email]"
 
-# ✅ 앱 코드 및 공용 스키마 복사 (루트 기준)
+# ✅ 8. 앱 코드 및 공용 스키마 복사
 COPY apps/backend_api /app
 COPY packages/shared_schemas /shared_schemas
 
-# ✅ PYTHONPATH 설정
+# ✅ 9. PYTHONPATH 설정
 ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
 
-# ✅ 비루트 사용자로 전환
+# ✅ 10. 비루트 사용자 전환
 USER appuser
 
-# ✅ 포트 지정 (PORT 자동 주입)
+# ✅ 11. 포트 및 실행 명령
 EXPOSE 8000
-
-# ✅ FastAPI 서버 실행
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
