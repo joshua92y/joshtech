@@ -26,6 +26,6 @@ services:
       - 'traefik.http.routers.api.entrypoints=websecure'
       - 'traefik.http.routers.api.tls.certresolver=myresolver'
     environment:
-      - REDIS_HOST=129.154.49.74
+      - REDIS_HOST=158.180.87.55
       - REDIS_PORT=6379
     restart: always
