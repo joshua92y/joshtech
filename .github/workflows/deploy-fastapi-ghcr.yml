@@ -8,7 +8,7 @@ on:
     paths:
       - 'apps/backend_api/**'
       - 'packages/shared_schemas/**'
-      - '.github/workflows/deploy-fastapi-ghcr-fly.yml'
+      - '.github/workflows/deploy-fastapi-ghcr.yml'
   workflow_dispatch: # ✅ 수동 실행 버튼 추가
 
 jobs:
