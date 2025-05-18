@@ -31,7 +31,7 @@ jobs:
       - name: 🐳 Build and Push Multi-Arch Docker image to GHCR
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/backend_api
+          context: .
           file: ./apps/backend_api/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
