@@ -23,6 +23,7 @@ services:
     image: ghcr.io/joshua92y/joshtech-fastapi:latest
     labels:
       - 'traefik.enable=true'
+      - 'traefik.http.services.api.loadbalancer.server.port=8000'
 
       # HTTP → HTTPS 강제 리디렉션
       - 'traefik.http.routers.api.rule=Host(`api.joshuatech.dev`)'
