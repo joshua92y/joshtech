@@ -1,4 +1,5 @@
-// next.config.js
+// apps/frontend/next.config.js
+
 const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,
   options: {
@@ -14,7 +15,7 @@ const baseConfig = {
     return [
       {
         source: "/og",
-        destination: "/home",
+        destination: "https://api.joshuatech.dev/og",
       },
     ];
   },
