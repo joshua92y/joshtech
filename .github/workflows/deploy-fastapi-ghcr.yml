@@ -87,10 +87,9 @@ jobs:
             cd ~/deploy/joshtech
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # ✅ traefik 디렉토리와 인증 파일 권한 설정
-            sudo mkdir -p traefik
-            [ -f traefik/acme.json ] || sudo touch traefik/acme.json
-            sudo chmod 600 traefik/acme.json
+            # ✅ acme.json 파일 생성
+            [ -f infra/oci/traefik/acme.json ] || sudo touch infra/oci/traefik/acme.json
+            sudo chmod 600 infra/oci/traefik/acme.json
 
             # ✅ 최신 이미지 Pull 및 배포 실행 (Compose v2 명령어)
             sudo docker compose pull
