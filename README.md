@@ -70,3 +70,5 @@ C:\Program Files\Chromium\Application\chrome.exe 설치경로
 9.OCI
 cat ./id_rsa | clip
 ssh -i .\id_rsa ubuntu@152.69.233.183 #fastapi
+ssh -i .\id_rsa ubuntu@158.180.87.55 #cache
+docker logs -f dragonfly

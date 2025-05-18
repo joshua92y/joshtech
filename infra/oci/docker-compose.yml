@@ -28,7 +28,6 @@ services:
       # HTTP → HTTPS 강제 리디렉션
       - 'traefik.http.routers.api.rule=Host(`api.joshuatech.dev`)'
       - 'traefik.http.routers.api.entrypoints=web'
-      - 'traefik.http.routers.api.middlewares=https-redirect@file'
 
       # HTTPS 라우터 설정
       - 'traefik.http.routers.api-secure.rule=Host(`api.joshuatech.dev`)'

@@ -2,7 +2,7 @@
 
 log:
   level: DEBUG # 로그 수준: DEBUG / INFO / ERROR
-  filePath: /var/log/traefik.log # Traefik 시스템 로그
+  #filePath: /var/log/traefik.log # Traefik 시스템 로그
 
 accessLog:
   filePath: /var/log/access.log # 클라이언트 접근 로그
@@ -36,9 +36,3 @@ certificatesResolvers:
       storage: /letsencrypt/acme.json # 인증서 저장 위치
       tlsChallenge: true # 포트 443 기반 인증
       caServer: https://acme-v02.api.letsencrypt.org/directory # Let's Encrypt production 서버
-
-http:
-  middlewares:
-    https-redirect:
-      redirectScheme:
-        scheme: https

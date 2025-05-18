@@ -10,6 +10,14 @@ const withMDX = require("@next/mdx")({
 const baseConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   output: "export",
+  async rewrites() {
+    return [
+      {
+        source: "/og",
+        destination: "/home",
+      },
+    ];
+  },
   transpilePackages: ["next-mdx-remote"],
   sassOptions: {
     compiler: "modern",
