@@ -1,70 +1,68 @@
-# .github/workflows/deploy-fastapi-ghcr.yml
-# ✅ 워크플로우 이름
-name: Build & Deploy FastAPI to GHCR and Fly.io
+# 🔧 워크플로우 이름
+name: Build & Deploy FastAPI to GHCR and OCI
 
-# ✅ 실행 조건: 다음 디렉토리에 변경이 생기면 실행
 on:
+  # 🟡 변경 감지 경로 설정
   push:
     paths:
-      - 'apps/backend_api/**'
-      - 'packages/shared_schemas/**'
-      - '.github/workflows/deploy-fastapi-ghcr.yml'
-      - 'infra/oci/**'
-  workflow_dispatch: # ✅ 수동 실행 버튼 추가
+      - 'apps/backend_api/**' # FastAPI 백엔드 코드
+      - 'packages/shared_schemas/**' # 공통 Pydantic 스키마
+      - '.github/workflows/deploy-fastapi-ghcr.yml' # 이 워크플로우 자체
+      - 'infra/oci/**' # 배포 관련 인프라 설정
+  workflow_dispatch: # ✅ 수동 실행 버튼 지원
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest # ✅ GitHub Actions 실행 환경
+    runs-on: ubuntu-latest # GitHub Actions 런타임 환경
 
     steps:
-      # ✅ 1. 현재 GitHub 리포지토리 코드를 체크아웃
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # ✅ 1. 현재 GitHub 리포지토리 코드 체크아웃
+      - name: 📦 Checkout repository
+        uses: actions/checkout@v4
 
-      # ✅ 2. GitHub Container Registry (GHCR)에 로그인
-      - name: Log in to GitHub Container Registry
+      # ✅ 2. GitHub Container Registry(GHCR)에 로그인
+      - name: 🔐 Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      # ✅ 3. Docker 이미지 빌드 (FastAPI + shared_schemas 포함) 및 GHCR에 푸시
-      - name: Build and push to GHCR
+      # ✅ 3. Docker 이미지 빌드 및 GHCR로 푸시
+      - name: 🐳 Build and Push Docker image to GHCR
         run: |
           docker build \
             -t ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest \
             -f apps/backend_api/Dockerfile .
-                docker push ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest
-      # ✅ 🔍 디버깅: 실제로 파일이 존재하는지 확인
-      - name: Debug file structure before SCP
+          docker push ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest
+
+      # ✅ 4. 배포용 구성 파일 존재 여부 디버깅
+      - name: 🔍 Debug file structure before SCP
         run: |
-          echo "Current directory: $PWD"
-          echo "--- Showing all files under ./infra/oci ---"
+          echo "📁 Current directory: $PWD"
+          echo "--- Showing files under ./infra/oci ---"
           find infra/oci
-          echo "--- Showing docker-compose.yml exists? ---"
+          echo "--- Checking required files ---"
           test -f infra/oci/docker-compose.yml && echo "✅ Found docker-compose.yml" || echo "❌ Missing docker-compose.yml"
           test -f infra/oci/traefik/traefik.yml && echo "✅ Found traefik.yml" || echo "❌ Missing traefik.yml"
 
-      # ✅ 4. docker-compose.yml + traefik 설정 파일들을 서버로 복사
-      - name: Upload compose files to OCI
-        uses: appleboy/scp-action@v1
+      # ✅ 5. 서버로 docker-compose.yml, traefik.yml 복사 (strip_components로 경로 정리)
+      - name: 📤 Upload compose and Traefik files to OCI server
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
           username: ubuntu
           key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
           port: 22
-          source: |
-            infra/oci/docker-compose.yml
-            infra/oci/traefik/traefik.yml
+          source: [infra/oci/docker-compose.yml, infra/oci/traefik/traefik.yml]
           target: ~/deploy/joshtech/
-          strip_components: 2
+          strip_components: 2 # → infra/oci 제거하고 경로 평탄화
           overwrite: true
           debug: true
 
-      # ✅ 5. OCI 서버에 SSH 접속 후 docker compose 실행
-      - name: Deploy to OCI via SSH (Compose v2)
-        uses: appleboy/ssh-action@v1.0.0
+      # ✅ 6. 서버에 SSH 접속하여 docker compose로 배포 실행
+      - name: 🚀 SSH into OCI and deploy using Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
           username: ubuntu
@@ -72,8 +70,13 @@ jobs:
           port: 22
           script: |
             cd ~/deploy/joshtech
-            mv infra/oci/docker-compose.yml . || true  # 이미 있으면 무시
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            [ -f traefik/acme.json ] && sudo chmod 600 traefik/acme.json
+
+            # ✅ traefik 디렉토리와 인증 파일 권한 설정
+            sudo mkdir -p traefik
+            [ -f traefik/acme.json ] || sudo touch traefik/acme.json
+            sudo chmod 600 traefik/acme.json
+
+            # ✅ 최신 이미지 Pull 및 배포 실행 (Compose v2 명령어)
             sudo docker compose pull
             sudo docker compose up -d --remove-orphans
