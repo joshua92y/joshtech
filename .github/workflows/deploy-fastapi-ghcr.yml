@@ -35,7 +35,16 @@ jobs:
           docker build \
             -t ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest \
             -f apps/backend_api/Dockerfile .
-          docker push ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest
+                docker push ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest
+      # ✅ 🔍 디버깅: 실제로 파일이 존재하는지 확인
+      - name: Debug file structure before SCP
+        run: |
+          echo "Current directory: $PWD"
+          echo "--- Showing all files under ./infra/oci ---"
+          find infra/oci
+          echo "--- Showing docker-compose.yml exists? ---"
+          test -f infra/oci/docker-compose.yml && echo "✅ Found docker-compose.yml" || echo "❌ Missing docker-compose.yml"
+          test -f infra/oci/traefik/traefik.yml && echo "✅ Found traefik.yml" || echo "❌ Missing traefik.yml"
 
       # ✅ 4. docker-compose.yml + traefik 설정 파일들을 서버로 복사
       - name: Upload compose files to OCI
@@ -59,7 +68,7 @@ jobs:
           port: 22
           script: |
             cd ~/deploy/joshtech
-            mv ~/deploy/joshtech/infra/oci/docker-compose.yml ~/deploy/joshtech/
+            mv infra/oci/docker-compose.yml . || true  # 이미 있으면 무시
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
             [ -f traefik/acme.json ] && sudo chmod 600 traefik/acme.json
             sudo docker compose pull
