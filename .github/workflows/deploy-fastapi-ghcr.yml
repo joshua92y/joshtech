@@ -60,9 +60,7 @@ jobs:
           script: |
             cd ~/deploy/joshtech
             mv ~/deploy/joshtech/infra/oci/docker-compose.yml ~/deploy/joshtech/
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            chmod 600 traefik/acme.json || true
-            newgrp docker <<EOF
-            docker compose pull
-            docker compose up -d --remove-orphans
-            EOF
+            echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            [ -f traefik/acme.json ] && sudo chmod 600 traefik/acme.json
+            sudo docker compose pull
+            sudo docker compose up -d --remove-orphans
