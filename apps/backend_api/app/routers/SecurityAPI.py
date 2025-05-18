@@ -1,4 +1,4 @@
-# backend_api/app/routers/SecurityAPI.py
+# backend_api/app/routers/securityAPI.py
 import os
 from fastapi import APIRouter, Request, Cookie, status, HTTPException
 from fastapi.responses import JSONResponse

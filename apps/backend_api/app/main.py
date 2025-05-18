@@ -17,7 +17,7 @@ app = FastAPI(
 )
 app.add_middleware(AuthMiddleware)
 
-# ✅ 라우터 등록
+# ✅ 라우터 등록(대소문자 주의)
 from .routers import contactAPI, projectAPI, resumeAPI, frontAPI, securityAPI, accounts
 
 app.include_router(resumeAPI.router)
