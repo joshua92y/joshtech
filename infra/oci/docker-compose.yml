@@ -12,6 +12,7 @@ services:
     ports:
       - '80:80'
       - '443:443'
+      - '8080:8080'
     volumes:
       - './traefik/traefik.yml:/etc/traefik/traefik.yml'
       - './traefik/acme.json:/letsencrypt/acme.json'
@@ -22,9 +23,17 @@ services:
     image: ghcr.io/joshua92y/joshtech-fastapi:latest
     labels:
       - 'traefik.enable=true'
+
+      # HTTP → HTTPS 강제 리디렉션
       - 'traefik.http.routers.api.rule=Host(`api.joshuatech.dev`)'
-      - 'traefik.http.routers.api.entrypoints=websecure'
-      - 'traefik.http.routers.api.tls.certresolver=myresolver'
+      - 'traefik.http.routers.api.entrypoints=web'
+      - 'traefik.http.routers.api.middlewares=https-redirect@file'
+
+      # HTTPS 라우터 설정
+      - 'traefik.http.routers.api-secure.rule=Host(`api.joshuatech.dev`)'
+      - 'traefik.http.routers.api-secure.entrypoints=websecure'
+      - 'traefik.http.routers.api-secure.tls=true'
+      - 'traefik.http.routers.api-secure.tls.certresolver=myresolver'
     environment:
       - REDIS_HOST=158.180.87.55
       - REDIS_PORT=6379
