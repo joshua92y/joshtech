@@ -47,16 +47,31 @@ jobs:
           test -f infra/oci/traefik/traefik.yml && echo "✅ Found traefik.yml" || echo "❌ Missing traefik.yml"
 
       # ✅ 5. 서버로 docker-compose.yml, traefik.yml 복사 (strip_components로 경로 정리)
-      - name: 📤 Upload compose and Traefik files to OCI server
+      # ✅ docker-compose.yml 전송
+      - name: 📤 Upload docker-compose.yml to OCI server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
           username: ubuntu
           key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
           port: 22
-          source: [infra/oci/docker-compose.yml, infra/oci/traefik/traefik.yml]
+          source: infra/oci/docker-compose.yml
           target: ~/deploy/joshtech/
-          strip_components: 2 # → infra/oci 제거하고 경로 평탄화
+          strip_components: 2
+          overwrite: true
+          debug: true
+
+      # ✅ traefik.yml 전송
+      - name: 📤 Upload traefik.yml to OCI server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
+          username: ubuntu
+          key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          port: 22
+          source: infra/oci/traefik/traefik.yml
+          target: ~/deploy/joshtech/
+          strip_components: 2
           overwrite: true
           debug: true
 
