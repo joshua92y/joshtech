@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # ✅ 3. Chromium 경로 통일
-RUN ln -sf $(which chromium || which chromium-browser) /usr/bin/chromium
+RUN [ "$(which chromium || which chromium-browser)" != "/usr/bin/chromium" ] && \
+    ln -sf $(which chromium || which chromium-browser) /usr/bin/chromium || true
 
 # ✅ 4. 환경 변수 설정
 ENV PYTHONDONTWRITEBYTECODE=1 \
