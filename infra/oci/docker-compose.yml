@@ -1,0 +1,33 @@
+# infra/oci/docker-compose.yml
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    command:
+      - '--providers.docker=true'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.myresolver.acme.tlschallenge=true'
+      - '--certificatesresolvers.myresolver.acme.email=admin@joshuatech.dev'
+      - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - './traefik/traefik.yml:/etc/traefik/traefik.yml'
+      - './traefik/acme.json:/letsencrypt/acme.json'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    restart: always
+
+  fastapi:
+    image: ghcr.io/joshua92y/joshtech-fastapi:latest
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api.rule=Host(`api.joshuatech.dev`)'
+      - 'traefik.http.routers.api.entrypoints=websecure'
+      - 'traefik.http.routers.api.tls.certresolver=myresolver'
+    environment:
+      - REDIS_HOST=129.154.49.74
+      - REDIS_PORT=6379
+    restart: always

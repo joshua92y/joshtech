@@ -1,0 +1,38 @@
+# infra/oci/traefik/traefik.yml
+
+log:
+  level: DEBUG # INFO | DEBUG | ERROR
+  filePath: /var/log/traefik.log
+
+accessLog:
+  filePath: /var/log/access.log
+  bufferingSize: 100
+
+api:
+  dashboard: true
+  insecure: true # Dev에서는 true, prod에서는 인증 필요하게 설정 권장
+
+entryPoints:
+  web:
+    address: ':80'
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ':443'
+
+providers:
+  docker:
+    endpoint: 'unix:///var/run/docker.sock'
+    exposedByDefault: false
+    network: bridge
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: admin@joshuatech.dev
+      storage: /letsencrypt/acme.json
+      tlsChallenge: true
+      caServer: https://acme-v02.api.letsencrypt.org/directory # ✅ 프로덕션용

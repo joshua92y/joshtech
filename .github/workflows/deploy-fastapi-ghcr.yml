@@ -1,3 +1,4 @@
+# .github/workflows/deploy-fastapi-ghcr.yml
 # ✅ 워크플로우 이름
 name: Build & Deploy FastAPI to GHCR and Fly.io
 
@@ -35,37 +36,27 @@ jobs:
             -f apps/backend_api/Dockerfile .
           docker push ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest
 
-      # ✅ 4. Fly.io에 사용할 Docker 이미지 태그 변경 (GHCR → Fly용)
-      - name: Tag image for Fly.io
-        run: |
-          docker tag \
-            ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest \
-            registry.fly.io/joshtech-api:latest
+      # ✅ 4. docker-compose.yml + traefik 설정 파일들을 서버로 복사
+      - name: Upload compose files to OCI
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
+          username: ubuntu
+          key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          source: infra/oci/*
+          target: ~/deploy/joshtech/
 
-      # ✅ 5. Fly.io 레지스트리에 로그인 (FLY_API_TOKEN은 Secrets에 저장해두기)
-      - name: Log in to Fly.io Docker Registry
-        run: echo ${{ secrets.FLY_API_TOKEN }} | docker login registry.fly.io -u x --password-stdin
-
-      # ✅ 6. Fly.io 레지스트리에 Docker 이미지 푸시
-      - name: Push image to Fly.io
-        run: docker push registry.fly.io/joshtech-api:latest
-
-      # ✅ 7. flyctl CLI 도구 설치
-      - name: Install flyctl
-        run: |
-          curl -L https://fly.io/install.sh | sh
-          echo "$HOME/.fly/bin" >> $GITHUB_PATH
-
-      # ✅ 8. Fly.io 앱으로 원격 배포 (이미지는 푸시되어 있으므로 --image 사용)
-      - name: Deploy to Fly.io (Tokyo region)
-        run: |
-          echo "GITHUB_WORKSPACE is: ${{ env.GITHUB_WORKSPACE }}"
-          flyctl deploy \
-            --config ${{ env.GITHUB_WORKSPACE }}/apps/backend_api/fly.toml \
-            --image registry.fly.io/joshtech-api:latest \
-            --remote-only \
-            --primary-region nrt \
-            -a joshtech-api
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          GITHUB_WORKSPACE: ${{ github.workspace }} # GITHUB_WORKSPACE를 env로 명시적 전달
+      # ✅ 5. OCI 서버에 SSH 접속 후 docker compose 실행
+      - name: Deploy via SSH on OCI
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
+          username: ubuntu
+          key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/deploy/joshtech
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            chmod 600 traefik/acme.json  # ✅ 권한 설정
+            docker compose pull
+            docker compose up -d --remove-orphans

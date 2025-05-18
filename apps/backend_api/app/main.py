@@ -5,6 +5,7 @@ import os
 from .utils.scheduler import start as start_scheduler
 from .middleware.auth_middleware import AuthMiddleware
 from .decorators.auth import auth_required
+from .deps.redis_client import redis_client
 
 # .env 로드
 load_dotenv()
@@ -41,6 +42,15 @@ def health_check():
 
 @app.on_event("startup")
 async def startup_event():
+    # ✅ Redis 연결 확인
+    try:
+        pong = await redis_client.ping()
+        if pong:
+            print("✅ Redis 연결 성공")
+    except Exception as e:
+        print(f"❌ Redis 연결 실패: {e}")
+
+    # ✅ 스케줄러 시작
     start_scheduler()
 
 
