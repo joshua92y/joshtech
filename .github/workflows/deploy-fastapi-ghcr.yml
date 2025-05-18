@@ -28,7 +28,7 @@ jobs:
       - name: 🛠 Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: 🐳 Build and Push Multi-Arch Docker image to GHCR
+      - name: 🐳 Build and Push Multi-Arch Docker image to GHCR (with cache)
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -36,6 +36,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/joshtech-fastapi:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: 🔍 Debug file structure before SCP
         run: |
