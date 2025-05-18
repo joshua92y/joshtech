@@ -4,7 +4,7 @@ import { baseURL } from "@/app/resources";
 import { person } from "@/app/resources/content";
 
 export const runtime = "edge";
-
+import Image from "next/image";
 export async function GET(request: Request) {
   let url = new URL(request.url);
   let title = url.searchParams.get("title") || "Portfolio";
@@ -55,7 +55,7 @@ export async function GET(request: Request) {
               gap: "5rem",
             }}
           >
-            <img
+            <Image
               src={baseURL + person.avatar}
               style={{
                 width: "12rem",
@@ -63,6 +63,7 @@ export async function GET(request: Request) {
                 objectFit: "cover",
                 borderRadius: "100%",
               }}
+              alt={person.name}
             />
             <div
               style={{

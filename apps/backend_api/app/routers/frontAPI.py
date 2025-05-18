@@ -11,7 +11,7 @@ router = APIRouter()
 BASE_URL = os.getenv("BASE_URL", "https://api.joshuatech.dev")
 CDN_BASE = os.getenv("CDN_URL", "https://cdn.joshuatech.dev")
 
-TMP_DIR = Path("tmp")
+TMP_DIR = Path("/tmp")
 STATIC_DIR = Path("static")
 TMP_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -79,12 +79,13 @@ async def generate_og_image(
     person = {
         "name": "Kaname Nenthuki",
         "role": "Full-stack Developer",
-        "avatar": f"{CDN_BASE}/static/avatar.png",  # 외부 URL로 명시
+        "avatar": f"{CDN_BASE}/static/avatar.png",
     }
 
     html_content = f"""
     <html>
     <head>
+      <meta charset="UTF-8">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
         body {{
@@ -93,22 +94,50 @@ async def generate_og_image(
           background: #151515; color: white;
           padding: 8rem; display: flex;
         }}
-        .container {{ display: flex; flex-direction: column; justify-content: center; gap: 4rem; }}
-        .title {{ font-size: 8rem; letter-spacing: -0.05em; }}
-        .info {{ display: flex; gap: 5rem; align-items: center; }}
-        .avatar {{
-          width: 12rem; height: 12rem; border-radius: 50%;
-          object-fit: cover;
+        .container {{
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 4rem;
         }}
-        .name {{ font-size: 4.5rem; }}
-        .role {{ font-size: 2.5rem; opacity: 0.6; }}
+        .title {{
+          font-size: 8rem;
+          line-height: 8rem;
+          letter-spacing: -0.05em;
+          white-space: pre-wrap;
+          text-wrap: balance;
+        }}
+        .info {{
+          display: flex;
+          align-items: center;
+          gap: 5rem;
+        }}
+        .avatar {{
+          width: 12rem;
+          height: 12rem;
+          object-fit: cover;
+          border-radius: 50%;
+        }}
+        .name {{
+          font-size: 4.5rem;
+          line-height: 4.5rem;
+          white-space: pre-wrap;
+          text-wrap: balance;
+        }}
+        .role {{
+          font-size: 2.5rem;
+          line-height: 2.5rem;
+          opacity: 0.6;
+          white-space: pre-wrap;
+          text-wrap: balance;
+        }}
       </style>
     </head>
     <body>
       <div class="container">
         <div class="title">{title}</div>
         <div class="info">
-          <img src="{person['avatar']}" class="avatar" />
+          <img src="{person['avatar']}" class="avatar" alt="{person['name']}"/>
           <div>
             <div class="name">{person['name']}</div>
             <div class="role">{person['role']}</div>
@@ -128,11 +157,12 @@ async def generate_og_image(
 
     try:
         hti = Html2Image(output_path=str(TMP_DIR))
-        hti.browser_path = "/usr/bin/chromium"
+        hti.browser_path = "/usr/bin/chromium"  # ⚠️ 환경에 따라 경로 조정
         hti.screenshot(html_file=str(html_path), save_as=f"{uid}.png", size=(1280, 720))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"이미지 생성 실패: {str(e)}")
 
+    # 파일 정리 예약
     background_tasks.add_task(cleanup_file, str(html_path))
     background_tasks.add_task(cleanup_file, str(image_path))
 

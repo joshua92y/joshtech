@@ -10,6 +10,11 @@ const withMDX = require("@next/mdx")({
 const baseConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   output: "export",
+  transpilePackages: ["next-mdx-remote"],
+  sassOptions: {
+    compiler: "modern",
+    silenceDeprecations: ["legacy-js-api"],
+  },
   images: {
     unoptimized: true,
   },

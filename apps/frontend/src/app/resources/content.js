@@ -1,16 +1,16 @@
 import { Logo } from "@/once-ui/components";
 
 const person = {
-  firstName: "Selene",
-  lastName: "Yu",
+  firstName: "Joshua",
+  lastName: "Yoon",
   get name() {
     return `${this.firstName} ${this.lastName}`;
   },
-  role: "Design Engineer",
+  role: "Full Stack Engineer",
   avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  email: "contact@joshtech.com",
+  location: "Asia/Seoul", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  languages: ["Korean", "English", "Japanese"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter = {
@@ -256,7 +256,7 @@ const gallery = {
     {
       src: "/images/gallery/campfire.jpg",
       alt: "campfire",
-      orientation: "square",
+      orientation: "vertical",
     },
     {
       src: "/images/gallery/neon_crew.jpg",
