@@ -44,9 +44,9 @@ jobs:
           host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
           username: ubuntu
           key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
-          source:
-            - infra/oci/docker-compose.yml
-            - infra/oci/traefik/traefik.yml
+          source: |
+            infra/oci/docker-compose.yml
+            infra/oci/traefik/traefik.yml
           target: ~/deploy/joshtech/
 
       # ✅ 5. OCI 서버에 SSH 접속 후 docker compose 실행
