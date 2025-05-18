@@ -1,6 +1,4 @@
 # infra/oci/docker-compose.yml
-version: '3.8'
-
 services:
   traefik:
     image: traefik:v2.10

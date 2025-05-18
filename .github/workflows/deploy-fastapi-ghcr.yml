@@ -9,6 +9,7 @@ on:
       - 'apps/backend_api/**'
       - 'packages/shared_schemas/**'
       - '.github/workflows/deploy-fastapi-ghcr.yml'
+      - 'infra/oci/**'
   workflow_dispatch: # ✅ 수동 실행 버튼 추가
 
 jobs:
@@ -43,7 +44,9 @@ jobs:
           host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
           username: ubuntu
           key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
-          source: infra/oci/*
+          source:
+            - infra/oci/docker-compose.yml
+            - infra/oci/traefik/traefik.yml
           target: ~/deploy/joshtech/
 
       # ✅ 5. OCI 서버에 SSH 접속 후 docker compose 실행
@@ -56,7 +59,10 @@ jobs:
           port: 22
           script: |
             cd ~/deploy/joshtech
+            mv ~/deploy/joshtech/infra/oci/docker-compose.yml ~/deploy/joshtech/
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             chmod 600 traefik/acme.json || true
+            newgrp docker <<EOF
             docker compose pull
             docker compose up -d --remove-orphans
+            EOF
