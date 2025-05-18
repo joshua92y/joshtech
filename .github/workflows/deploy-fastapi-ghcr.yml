@@ -92,5 +92,5 @@ jobs:
             sudo chmod 600 traefik/acme.json
 
             # ✅ 최신 이미지 Pull 및 배포 실행 (Compose v2 명령어)
-            sudo docker compose pull
-            sudo docker compose up -d --remove-orphans
+            docker compose pull
+            docker compose up -d --remove-orphans
