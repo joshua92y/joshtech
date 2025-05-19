@@ -62,7 +62,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
 
   const avatars =
     post.metadata.team?.map((person) => ({
-      src: person.avatar,
+      src: person.avatar, // 포스트 객체의 메타데이터에서 team 배열의 각 객체에서 avatar(이미지경로)를 가져옴
     })) || [];
 
   return (
