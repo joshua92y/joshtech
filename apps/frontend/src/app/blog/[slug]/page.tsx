@@ -70,6 +70,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
       <Row maxWidth={12} hide="m" />
       <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="xs" gap="l">
+          {/* 블로그 포스트 스키마 SEO 정보 제공*/}
           <Schema
             as="blogPosting"
             baseURL={baseURL}
@@ -85,6 +86,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               image: `${baseURL}${person.avatar}`,
             }}
           />
+          {/* 블로그로 돌아가기 버튼 */}
           <Button
             data-border="rounded"
             href="/blog"
@@ -95,14 +97,18 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
           >
             Posts
           </Button>
+          {/* 포스트 타이틀 색션 */}
           <Heading variant="display-strong-s">{post.metadata.title}</Heading>
+          {/* 포스트 작성자 색션 */}
           <Row gap="12" vertical="center">
             {avatars.length > 0 && <AvatarGroup size="s" avatars={avatars} />}
             <Text variant="body-default-s" onBackground="neutral-weak">
-              {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
+              {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)} {/* 포스트 작성일 */}
             </Text>
           </Row>
+          {/* 포스트 컨텐츠 색션 */}
           <Column as="article" fillWidth>
+            {/* 마크다운으로 작성된 파일을 읽어서 렌더링 */}
             <CustomMDX source={post.content} />
           </Column>
           <ScrollToHash />
