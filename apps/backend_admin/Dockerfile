@@ -50,4 +50,4 @@ USER appuser
 EXPOSE 8000
 
 # ✅ Django 서버 실행 (이미 정적 파일이 수집되어 있으므로 collectstatic 제외)
-CMD ["sh", "-c", "python manage.py migrate accounts && python manage.py migrate && uvicorn config.asgi:application --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "python manage.py migrate && uvicorn config.asgi:application --host 0.0.0.0 --port ${PORT:-8000}"]
