@@ -1,0 +1,54 @@
+# ✅ .github/workflows/deploy-dragonfly-worker.yml
+name: Deploy Dragonfly + Worker
+
+on:
+  push:
+    paths:
+      - 'apps/worker/**'
+      - 'packages/shared_queue/**'
+      - 'infra/oci/dragonfly-worker-compose.yml'
+      - '.github/workflows/deploy-dragonfly-worker.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔐 Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐳 Build & Push Worker Image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/r2-worker:latest -f Dockerfile.worker .
+          docker push ghcr.io/${{ github.repository_owner }}/r2-worker:latest
+
+      - name: 📤 Upload docker-compose to cache VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.OCI_HOST_CACHE_VM }}
+          username: ubuntu
+          key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          port: 22
+          source: infra/oci/dragonfly-worker-compose.yml
+          target: ~/deploy/cache
+
+      - name: 🚀 SSH to deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.OCI_HOST_CACHE_VM }}
+          username: ubuntu
+          key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/deploy/cache
+            docker compose -f dragonfly-worker-compose.yml pull
+            docker compose -f dragonfly-worker-compose.yml down
+            docker compose -f dragonfly-worker-compose.yml up -d

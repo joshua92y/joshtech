@@ -7,7 +7,7 @@ from django.conf import settings
 
 
 async def ping_flyio():
-    url = os.getenv("FASTAPI_URL", "https://joshtech-api.fly.dev/healthz")
+    url = os.getenv("FASTAPI_URL", "https://api.joshtech.dev/healthz")
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
             response = await client.get(url)

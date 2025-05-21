@@ -1,0 +1,12 @@
+# Dockerfile.worker
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY apps/worker/r2_worker.py ./r2_worker.py
+COPY packages/shared_queue ./shared_queue
+COPY requirements.txt .
+#PYTHONPATH 설정
+ENV PYTHONPATH="${PYTHONPATH}:/shared_queue"
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["python", "r2_worker.py"]

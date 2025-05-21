@@ -1,5 +1,5 @@
 ### 📤 FastAPI 서버에 문의 메일 전송 테스트
-POST https://joshtech-api.fly.dev/contact/send
+POST https://api.joshtech.dev/contact/send
 Content-Type: application/json
 
 {
