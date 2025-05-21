@@ -19,20 +19,26 @@ import { Metadata } from "next";
 import { Meta, Schema } from "@/once-ui/modules";
 
 //generateStaticParams()에 getPosts의 슬러그 배열을 주고 스태틱 파라미터를 미리 생성
-export async function generateStaticParams(): Promise<{ slug: string }[]> { //Promise<{ slug: string }[]> 타입 제네릭 타입 파라미터
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  //Promise<{ slug: string }[]> 타입 제네릭 타입 파라미터
   const posts = getPosts(["src", "app", "blog", "posts"]); //getPosts에서 받아온 객체에서 slug를 추출하여 posts 배열에 할당
-  return posts.map((post) => ({ //posts에서 받아온 객체에서 slug를 추출하여 post 배열에 할당
-    slug: post.slug, 
+  return posts.map((post) => ({
+    //posts에서 받아온 객체에서 slug를 추출하여 post 배열에 할당
+    slug: post.slug,
   }));
 }
 //사용자가 특정 포스트를 방문할 때 메타데이터를 생성 or export biled시에 메타데이터를 생성
-export async function generateMetadata({params,}: {params: Promise<{ slug: string | string[] }>;}): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string | string[] }>;
+}): Promise<Metadata> {
   const routeParams = await params; // Next.js App Router에서 동적 경로(/blog/[slug])의 값(slug)을 params라는 객체로 제공하고,이 비동기 파라미터를 await로 풀어서 routeParams에 할당한다.
   const slugPath = Array.isArray(routeParams.slug) // 경로가 배열인지 확인하고 slugPath에 URL 경로를 할당
     ? routeParams.slug.join("/") // 배열이면 배열의 요소를 결합 routeParams.slug = ["foo", "bar"] => ["foo/bar"]
     : routeParams.slug || ""; // 배열이 아니면 경로를 반환 routeParams.slug = ["foo"] => ["foo"]
 
-  const posts = getPosts(["src", "app", "blog", "posts"]); 
+  const posts = getPosts(["src", "app", "blog", "posts"]);
   let post = posts.find((post) => post.slug === slugPath); // 슬러그 벨류가 slugPath와 일치하는 포스트 객체를 반환
 
   if (!post) return {};
@@ -103,7 +109,8 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
           <Row gap="12" vertical="center">
             {avatars.length > 0 && <AvatarGroup size="s" avatars={avatars} />}
             <Text variant="body-default-s" onBackground="neutral-weak">
-              {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)} {/* 포스트 작성일 */}
+              {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}{" "}
+              {/* 포스트 작성일 */}
             </Text>
           </Row>
           {/* 포스트 컨텐츠 색션 */}

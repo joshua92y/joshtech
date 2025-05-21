@@ -12,7 +12,7 @@ type Team = {
 };
 
 // 메타데이터는 포스트의 정보를 담고 있는 객체 타입 정의
-type Metadata = { 
+type Metadata = {
   title: string;
   publishedAt: string;
   summary: string;
@@ -27,15 +27,17 @@ import { notFound } from "next/navigation";
 
 //getMDXData에서 호출되고 postsdir경로(/project-root/src/app/blog/posts)를 받아와서 디렉토리의 모든 파일을 읽고 .mdx로 끝나는 파일명을 반환
 function getMDXFiles(dir: string) {
-  if (!fs.existsSync(dir)) { //fs.existsSync(dir) 디렉토리가 존재하는지 확인_boolean_node.js함수
+  if (!fs.existsSync(dir)) {
+    //fs.existsSync(dir) 디렉토리가 존재하는지 확인_boolean_node.js함수
     notFound(); // 디렉토리가 없으면 404 페이지로 리다이렉트
   }
-  
+
   return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx"); // 예시 결과: ["seo.mdx", "work.mdx", "blog.mdx".....]
 }
 //getMDXFiles에서 호출되고 postsdir경로와 파일명을 받아와서 파일을 읽고 메타데이터와 콘텐츠를 반환
 function readMDXFile(filePath: string) {
-  if (!fs.existsSync(filePath)) { //fs.existsSync(filePath) 파일이 존재하는지 확인_boolean_node.js함수
+  if (!fs.existsSync(filePath)) {
+    //fs.existsSync(filePath) 파일이 존재하는지 확인_boolean_node.js함수
     notFound(); // 파일이 없으면 404 페이지로 리다이렉트
   }
 
@@ -58,7 +60,8 @@ function readMDXFile(filePath: string) {
 //getPosts에서 호출되고 postsdir경로를 받아와서 getMDXFiles로 전달 후 변환된 배열을 맵핑(메타데이터, 콘텐츠)=>readMDXFile 슬러그=> 파일명
 function getMDXData(dir: string) {
   const mdxFiles = getMDXFiles(dir); // 예시 결과: ["seo.mdx", "work.mdx", "blog.mdx".....]
-  return mdxFiles.map((file) => { // 예시 결과: [{metadata, slug, content}, {metadata, slug, content}, {metadata, slug, content}.....]
+  return mdxFiles.map((file) => {
+    // 예시 결과: [{metadata, slug, content}, {metadata, slug, content}, {metadata, slug, content}.....]
     const { metadata, content } = readMDXFile(path.join(dir, file)); // 파일 경로를 만들고 readMDXFile로 전달 후 메타데이터와 콘텐츠를 반환
     const slug = path.basename(file, path.extname(file)); // basename로 전체 파일 이름과 path.extname(file)로 파일 확장자를 넣어서 제거한 파일이름을 슬러그로 변환
 

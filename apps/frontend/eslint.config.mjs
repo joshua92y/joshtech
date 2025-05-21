@@ -19,39 +19,39 @@ const compat = new FlatCompat({
 export default [
   {
     ignores: [
-    "node_modules/**",
-    ".next/**",
-    "out/**",
-    "dist/**",
-    "src/components/**", // 컴포넌트 제외
-    "src/once-ui/**", // 컴포넌트 제외
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "dist/**",
+      "src/components/**", // 컴포넌트 제외
+      "src/once-ui/**", // 컴포넌트 제외
     ],
   },
   js.configs.recommended,
   ...compat.extends("next/core-web-vitals", "plugin:prettier/recommended"), //"plugin:@typescript-eslint/recommended",
-    {
-      files: ["**/*.{js,jsx,ts,tsx}"],
-      languageOptions: {
-        parser: tsParser,
-        parserOptions: {
-          ecmaVersion: "latest",
-          sourceType: "module",
-          project: "./tsconfig.json",
-        },
-        globals: {
-          ...globals.browser,
-          ...globals.node,
-        }, // ✅ Node.js + 브라우저 global 객체 자동 등록
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        project: "./tsconfig.json",
       },
-      plugins: {
-        "@typescript-eslint": tsPlugin,
-        prettier: prettier,
-        next: next,
-      },
-      rules: {
-        "prettier/prettier": "error",
-        "no-unused-vars": "off",
-        "no-undef": "off",
-      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      }, // ✅ Node.js + 브라우저 global 객체 자동 등록
     },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+      prettier: prettier,
+      next: next,
+    },
+    rules: {
+      "prettier/prettier": "error",
+      "no-unused-vars": "off",
+      "no-undef": "off",
+    },
+  },
 ];
