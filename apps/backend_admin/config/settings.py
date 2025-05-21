@@ -112,8 +112,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # 🗄 DB 설정 (PostgreSQL)
-check = True
-if check:
+if not DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
