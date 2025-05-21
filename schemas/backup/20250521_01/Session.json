@@ -1,0 +1,24 @@
+{
+  "title": "Session",
+  "type": "object",
+  "properties": {
+    "session_key": {
+      "type": "string",
+      "title": "세션 키"
+    },
+    "session_data": {
+      "type": "string",
+      "title": "세션 날짜"
+    },
+    "expire_date": {
+      "type": "string",
+      "title": "만료 날짜",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "session_key",
+    "session_data",
+    "expire_date"
+  ]
+}

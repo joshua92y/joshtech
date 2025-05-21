@@ -1,0 +1,17 @@
+{
+  "title": "Group",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "name": {
+      "type": "string",
+      "title": "이름"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

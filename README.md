@@ -2,8 +2,12 @@
 
 dev.info
 #etc
-conda deactivate # 가상환경 종료
-conda remove --name admin-env --all # 가상환경 제거
+콘다환경 오버스팩으로 파이썬 환경으로 변경
+--conda deactivate # 가상환경 종료
+--conda remove --name admin-env --all # 가상환경 제거
+++ python -m venv venv #가상환경 셋팅
+++ .\venv\Scripts\activate #가상환경 실행
+deactivate # 가상환경 종료
 pip install -r requirements.txt #설치 pip
 pip freeze > requirements.txt #설치 pip 저장
 

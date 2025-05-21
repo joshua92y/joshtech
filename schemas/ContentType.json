@@ -1,0 +1,22 @@
+{
+  "title": "ContentType",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "app_label": {
+      "type": "string",
+      "title": "app label"
+    },
+    "model": {
+      "type": "string",
+      "title": "python 모델 클래스 명"
+    }
+  },
+  "required": [
+    "app_label",
+    "model"
+  ]
+}

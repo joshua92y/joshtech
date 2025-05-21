@@ -1,0 +1,27 @@
+{
+  "title": "Permission",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "name": {
+      "type": "string",
+      "title": "이름"
+    },
+    "content_type": {
+      "type": "integer",
+      "title": "콘텐츠 타입"
+    },
+    "codename": {
+      "type": "string",
+      "title": "코드명"
+    }
+  },
+  "required": [
+    "name",
+    "content_type",
+    "codename"
+  ]
+}

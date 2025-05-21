@@ -1,0 +1,53 @@
+{
+  "title": "LogEntry",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "action_time": {
+      "type": "string",
+      "title": "액션 타임",
+      "format": "date-time",
+      "default": "2025-05-21 02:46:04.623227+00:00"
+    },
+    "user": {
+      "type": "integer",
+      "title": "사용자"
+    },
+    "content_type": {
+      "type": "integer",
+      "title": "콘텐츠 타입",
+      "nullable": true
+    },
+    "object_id": {
+      "type": "string",
+      "title": "오브젝트 아이디",
+      "nullable": true
+    },
+    "object_repr": {
+      "type": "string",
+      "title": "오브젝트 표현"
+    },
+    "action_flag": {
+      "type": "integer",
+      "title": "액션 플래그",
+      "enum": [
+        1,
+        2,
+        3
+      ]
+    },
+    "change_message": {
+      "type": "string",
+      "title": "메시지 변경"
+    }
+  },
+  "required": [
+    "action_time",
+    "user",
+    "object_repr",
+    "action_flag"
+  ]
+}

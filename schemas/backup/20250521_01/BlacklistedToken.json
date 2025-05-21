@@ -1,0 +1,22 @@
+{
+  "title": "BlacklistedToken",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "id"
+    },
+    "token": {
+      "type": "integer",
+      "title": "token"
+    },
+    "blacklisted_at": {
+      "type": "string",
+      "title": "blacklisted at",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "token"
+  ]
+}
