@@ -38,5 +38,17 @@ class FileMeta(models.Model):
     is_purged = models.BooleanField(default=False)
     purged_at = models.DateTimeField(null=True, blank=True)
 
+    # ✅ 복구 관련
+    restored_at = models.DateTimeField(null=True, blank=True)
+    restored_by = models.CharField(
+        max_length=100, null=True, blank=True, help_text="복구 요청 유저"
+    )
+    restored_from = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text="복구 요청 위치 (예: web, fastapi, android)",
+    )
+
     def __str__(self):
         return f"{self.filename} ({self.user})"

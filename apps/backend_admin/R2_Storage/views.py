@@ -81,3 +81,45 @@ class FileMetaPurgeAPIView(APIView):
                 continue
 
         return Response({"updated": updated}, status=status.HTTP_200_OK)
+
+class FileMetaPendingAPIView(APIView):
+    def get(self, request):
+        files = FileMeta.objects.filter(is_deleted=True, is_purged=False)
+        data = [{"id": f.id, "key": f.key} for f in files]
+        return Response(data, status=status.HTTP_200_OK)
+
+class FileMetaRestoreAPIView(APIView):
+    def post(self, request, pk):
+        restored_from = request.query_params.get("from", "admin-panel")
+        restored_by = request.query_params.get("by", "admin")
+
+        try:
+            file = FileMeta.objects.get(pk=pk, is_deleted=True, is_purged=False)
+
+            file.is_deleted = False
+            file.deleted_at = None
+            file.deleted_by = None
+            file.deleted_from = None
+            file.restored_at = timezone.now()
+            file.restored_by = restored_by
+            file.restored_from = restored_from
+
+            file.save(
+                update_fields=[
+                    "is_deleted",
+                    "deleted_at",
+                    "deleted_by",
+                    "deleted_from",
+                    "restored_at",
+                    "restored_by",
+                    "restored_from",
+                ]
+            )
+
+            return Response({"status": "파일 복구 완료"}, status=status.HTTP_200_OK)
+
+        except FileMeta.DoesNotExist:
+            return Response(
+                {"error": "파일 없음 또는 이미 영구 삭제됨"},
+                status=status.HTTP_404_NOT_FOUND,
+            )

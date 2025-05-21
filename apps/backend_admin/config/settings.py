@@ -12,8 +12,8 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 🔐 보안 설정
-SECRET_KEY = "django-insecure-khmm$7h-h3@bltm#vz=*_n(74)y_s2dy&zkyjfiwpf^y#br3v!"
-DEBUG = os.getenv("DEBUG", "False") == "True"
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 
 # 🌐 CORS/CSRF 설정
@@ -155,10 +155,7 @@ SIMPLE_JWT = {
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_BLACKLIST_ENABLED": True,
 }
-INTERNAL_API_KEY = os.getenv(
-    "INTERNAL_API_KEY",
-    "a601d47cad3a512c79ed67c44f396dbc330263f2d125a8fc32a978233acf4a0b",
-)
+INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY")
 MAX_DEVICE_COUNT = int(os.getenv("MAX_DEVICE_COUNT", 3))
 
 FASTAPI_CACHE_INVALIDATE_URL = os.getenv(
