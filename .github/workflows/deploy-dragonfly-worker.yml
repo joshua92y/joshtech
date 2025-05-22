@@ -40,8 +40,8 @@ jobs:
           source: infra/oci/dragonfly-worker-compose.yml
           target: ~/deploy/cache
 
-      - name: 🚀 SSH to deploy
-        uses: appleboy/ssh-action@v0.1.10
+      - name: 🚀 SSH into OCI and deploy worker with Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.OCI_HOST_CACHE_VM }}
           username: ubuntu
@@ -49,6 +49,17 @@ jobs:
           port: 22
           script: |
             cd ~/deploy/cache
-            docker compose -f dragonfly-worker-compose.yml pull
-            docker compose -f dragonfly-worker-compose.yml down
-            docker compose -f dragonfly-worker-compose.yml up -d
+
+            echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            cat <<EOF > .env
+            R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
+            R2_BUCKET=${{ secrets.R2_BUCKET }}
+            R2_ACCESS_KEY=${{ secrets.R2_ACCESS_KEY }}
+            R2_SECRET_KEY=${{ secrets.R2_SECRET_KEY }}
+            DJANGO_API_URL=${{ secrets.DJANGO_API_URL }}
+            EOF
+
+            docker compose --file dragonfly-worker-compose.yml pull
+            docker compose --file dragonfly-worker-compose.yml down
+            docker compose --file dragonfly-worker-compose.yml up -d --remove-orphans
