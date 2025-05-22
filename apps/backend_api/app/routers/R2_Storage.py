@@ -10,7 +10,7 @@ from redis_queue import delete_queue  # ✅ 큐 import
 
 from FileMeta import FileMeta  # ✅ 외부 모델 import
 
-router = APIRouter()
+router = APIRouter(prefix="/r2", tags=["R2 Storage"])
 
 # ✅ 환경 변수
 R2_ENDPOINT = os.getenv("R2_ENDPOINT")

@@ -4,7 +4,7 @@ from pydantic import BaseModel, EmailStr
 from Resume import Resume  # 조회용 (기존 유지)
 import httpx
 
-router = APIRouter()
+router = APIRouter(prefix="/resume", tags=["Resume"])
 
 # ✅ 이력서 제출용 요청 스키마
 class ResumeCreateRequest(BaseModel):

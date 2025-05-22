@@ -19,7 +19,7 @@ app = FastAPI(
 app.add_middleware(AuthMiddleware)
 
 # ✅ 라우터 등록(대소문자 주의)
-from .routers import contactAPI, projectAPI, resumeAPI, frontAPI, securityAPI, accounts
+from .routers import contactAPI, projectAPI, resumeAPI, frontAPI, securityAPI, accounts, R2_Storage
 
 app.include_router(resumeAPI.router)
 app.include_router(projectAPI.router)
@@ -27,7 +27,7 @@ app.include_router(contactAPI.router)
 app.include_router(frontAPI.router)
 app.include_router(securityAPI.router)
 app.include_router(accounts.router)
-
+app.include_router(R2_Storage.router)
 
 # 기본 루트
 @app.get("/")

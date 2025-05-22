@@ -6,10 +6,6 @@ import logging
 import asyncio
 import time
 import os
-from html2image import Html2Image
-import boto3
-from botocore.client import Config
-import httpx
 from dotenv import load_dotenv
 
 load_dotenv()

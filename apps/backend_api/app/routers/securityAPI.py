@@ -3,7 +3,7 @@ import os
 from fastapi import APIRouter, Request, Cookie, status, HTTPException
 from fastapi.responses import JSONResponse
 
-router = APIRouter()
+router = APIRouter(prefix="/security", tags=["Security"])
 
 
 @router.get("/check-auth")

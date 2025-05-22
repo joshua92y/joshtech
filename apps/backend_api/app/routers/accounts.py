@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Request
 from app.deps.auth import get_current_user
 from app.decorators.auth import auth_required
 
-router = APIRouter()
+router = APIRouter(prefix="/accounts", tags=["Accounts"])
 
 
 @router.get("/secure-endpoint")

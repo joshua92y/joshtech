@@ -7,7 +7,7 @@ from html2image import Html2Image
 from pathlib import Path
 import os, json
 
-router = APIRouter()
+router = APIRouter(prefix="/front", tags=["Front"])
 BASE_URL = os.getenv("BASE_URL", "https://api.joshuatech.dev")
 CDN_BASE = os.getenv("CDN_URL", "https://cdn.joshuatech.dev")
 

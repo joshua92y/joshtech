@@ -2,7 +2,7 @@
 from fastapi import APIRouter
 from Project import Project
 
-router = APIRouter()
+router = APIRouter(prefix="/projects", tags=["Projects"])
 
 
 @router.get("/projects", response_model=list[Project])
