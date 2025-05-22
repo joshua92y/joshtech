@@ -50,15 +50,18 @@ jobs:
           script: |
             cd ~/deploy/cache
 
+            # ✅ 최신 Docker 설치 (공식 스크립트 사용)
+            curl -fsSL https://get.docker.com | sh
+
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             cat <<EOF > .env
-            R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
-            R2_BUCKET=${{ secrets.R2_BUCKET }}
-            R2_ACCESS_KEY=${{ secrets.R2_ACCESS_KEY }}
-            R2_SECRET_KEY=${{ secrets.R2_SECRET_KEY }}
-            DJANGO_API_URL=${{ secrets.DJANGO_API_URL }}
-            EOF
+      R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
+      R2_BUCKET=${{ secrets.R2_BUCKET }}
+      R2_ACCESS_KEY=${{ secrets.R2_ACCESS_KEY }}
+      R2_SECRET_KEY=${{ secrets.R2_SECRET_KEY }}
+      DJANGO_API_URL=${{ secrets.DJANGO_API_URL }}
+      EOF
 
             docker compose --file dragonfly-worker-compose.yml pull
             docker compose --file dragonfly-worker-compose.yml down
