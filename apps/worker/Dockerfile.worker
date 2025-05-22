@@ -27,7 +27,8 @@ COPY packages/shared_queue ./shared_queue
 COPY packages/shared_schemas ./shared_schemas
 
 # ✅ PYTHONPATH 설정
-ENV PYTHONPATH="/shared_queue:/shared_schemas"
+ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
+ENV PYTHONPATH="${PYTHONPATH}:/shared_queue"
 
 # ✅ 컨테이너 실행 명령
 CMD ["python", "r2_worker.py"]
