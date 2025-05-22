@@ -27,7 +27,7 @@ jobs:
 
       - name: 🐳 Build & Push Worker Image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/worker:latest -f Dockerfile.worker apps/worker
+          docker build -t ghcr.io/${{ github.repository_owner }}/worker:latest -f apps/worker/Dockerfile.worker .
           docker push ghcr.io/${{ github.repository_owner }}/worker:latest
 
       - name: 📤 Upload docker-compose to cache VM

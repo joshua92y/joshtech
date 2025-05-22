@@ -1,4 +1,4 @@
-# Dockerfile.worker
+# apps/worker/Dockerfile.worker
 FROM python:3.11-slim
 
 WORKDIR /app
