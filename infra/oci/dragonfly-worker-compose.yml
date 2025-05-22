@@ -3,7 +3,7 @@ services:
   dragonfly:
     image: docker.dragonflydb.io/dragonflydb/dragonfly
     env_file:
-      - ../../.env
+      - .env
     container_name: dragonfly
     restart: always
     ports:
@@ -12,7 +12,7 @@ services:
   r2_worker:
     image: ghcr.io/joshua92y/worker:latest
     env_file:
-      - ../../.env
+      - .env
     container_name: worker
     restart: always
     depends_on:

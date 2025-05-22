@@ -55,7 +55,7 @@ jobs:
 
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            cat <<EOF > .env
+            cat <<EOF > infra/oci/.env
             R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
             R2_BUCKET=${{ secrets.R2_BUCKET }}
             R2_ACCESS_KEY=${{ secrets.R2_ACCESS_KEY }}
