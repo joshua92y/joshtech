@@ -1,12 +1,33 @@
 # apps/worker/Dockerfile.worker
 FROM python:3.11-slim
 
+# ✅ 시스템 패키지 설치 (PostgreSQL 연동 및 빌드 도구)
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*  
+# 이미지 용량 최소화
+
 WORKDIR /app
+
+
+# ✅ 보안 강화를 위해 전용 사용자 추가
+RUN groupadd -r appgroup && \
+    useradd -r -g appgroup -d /app -s /sbin/nologin -c "Docker image user" appuser
+
+# ✅ 의존성 설치 (프로젝트 루트 기준 경로로 COPY)
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+
 COPY apps/worker/r2_worker.py ./r2_worker.py
 COPY packages/shared_queue ./shared_queue
-COPY requirements.txt .
+COPY packages/shared_schemas ./shared_schemas
 #PYTHONPATH 설정
 ENV PYTHONPATH="${PYTHONPATH}:/shared_queue"
-RUN pip install --no-cache-dir -r requirements.txt
+ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
 
 CMD ["python", "r2_worker.py"]
