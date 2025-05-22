@@ -1,4 +1,4 @@
-# apps/worker/dragonfly-worker-compose.yml
+# apps/worker/dragonfly-worker-compose.yml 경로
 services:
   dragonfly:
     image: docker.dragonflydb.io/dragonflydb/dragonfly
