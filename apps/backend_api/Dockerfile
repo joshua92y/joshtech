@@ -35,10 +35,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # ✅ 8. 앱 코드 및 공용 스키마 복사
 COPY apps/backend_api /app
 COPY packages/shared_schemas /shared_schemas
+COPY packages/shared_queue /shared_queue
 
 # ✅ 9. PYTHONPATH 설정
 ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
-
+ENV PYTHONPATH="${PYTHONPATH}:/shared_queue"
 # ✅ 10. 비루트 사용자 전환
 USER appuser
 

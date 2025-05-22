@@ -1,3 +1,4 @@
+# .github/workflows/deploy-django-ghcr.yml
 name: Build & Push Django to GHCR
 
 on:

@@ -28,6 +28,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # ✅ 앱 코드 및 공통 스키마 복사
 COPY apps/backend_admin /app
 COPY packages/shared_schemas /shared_schemas
+COPY packages/shared_queue /shared_queue
 
 # ✅ shared_schemas와 shared_queue를 PYTHONPATH에 등록
 ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"

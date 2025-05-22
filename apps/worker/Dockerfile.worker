@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*  
 
+# ✅ 4. 환경 변수 설정
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 # ✅ 작업 디렉토리 설정
 WORKDIR /app
 
@@ -16,19 +20,20 @@ WORKDIR /app
 RUN groupadd -r appgroup && \
     useradd -r -g appgroup -d /app -s /sbin/nologin -c "Docker image user" appuser
 
+    
 # ✅ requirements 복사 및 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # ✅ 소스 복사
-COPY apps/worker/r2_worker.py ./r2_worker.py
-COPY packages/shared_queue ./shared_queue
-COPY packages/shared_schemas ./shared_schemas
+COPY apps/worker /app
+COPY packages/shared_queue /shared_queue
+COPY packages/shared_schemas /shared_schemas
 
 # ✅ PYTHONPATH 설정
 ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
 ENV PYTHONPATH="${PYTHONPATH}:/shared_queue"
 
 # ✅ 컨테이너 실행 명령
-CMD ["python", "r2_worker.py"]
+CMD ["sh", "-c", "python r2_worker.py"]
