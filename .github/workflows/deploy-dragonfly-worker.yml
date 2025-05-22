@@ -63,6 +63,6 @@ jobs:
             DJANGO_API_URL=${{ secrets.DJANGO_API_URL }}
             EOF
 
-            docker compose --file dragonfly-worker-compose.yml pull
-            docker compose --file dragonfly-worker-compose.yml down
-            docker compose --file dragonfly-worker-compose.yml up -d --remove-orphans
+            docker compose --file infra/oci/dragonfly-worker-compose.yml pull
+            docker compose --file infra/oci/dragonfly-worker-compose.yml down
+            docker compose --file infra/oci/dragonfly-worker-compose.yml up -d --remove-orphans
