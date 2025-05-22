@@ -1,39 +1,40 @@
 # apps/worker/Dockerfile.worker
-# ✅ 1. Python 슬림 이미지 사용 (빌드 속도/용량 최적화)
+# ✅ 1. Python 슬림 이미지 사용 (경량 이미지로 용량 및 보안 최적화)
 FROM python:3.11-slim
 
-# ✅ 빌드 도구 및 psycopg2 등 C 확장 모듈 빌드에 필요한 패키지 설치
+# ✅ 2. psycopg2 등 C 확장 모듈 설치를 위한 필수 시스템 패키지 설치
 RUN apt-get update && apt-get install -y \
     gcc \
     libpq-dev \
     build-essential \
-    && rm -rf /var/lib/apt/lists/*  
+    && rm -rf /var/lib/apt/lists/*
 
-# ✅ 4. 환경 변수 설정
+# ✅ 3. Python 기본 설정
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# ✅ 작업 디렉토리 설정
+# ✅ 4. 작업 디렉토리 지정
 WORKDIR /app
 
-# ✅ 전용 사용자 생성 (보안 목적)
+# ✅ 5. 전용 사용자(appuser) 생성 - 루트 사용 방지 (보안 강화)
 RUN groupadd -r appgroup && \
     useradd -r -g appgroup -d /app -s /sbin/nologin -c "Docker image user" appuser
 
-    
-# ✅ requirements 복사 및 설치
+# ✅ 6. 의존성 캐시 최적화를 위한 requirements.txt 먼저 복사 및 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# ✅ 소스 복사
+# ✅ 7. 애플리케이션 코드 복사
 COPY apps/worker /app
 COPY packages/shared_queue /shared_queue
 COPY packages/shared_schemas /shared_schemas
 
-# ✅ PYTHONPATH 설정
-ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
-ENV PYTHONPATH="${PYTHONPATH}:/shared_queue"
+# ✅ 8. PYTHONPATH 설정 (공유 패키지 임포트를 위한 경로 설정)
+ENV PYTHONPATH="/shared_schemas:/shared_queue"
 
-# ✅ 컨테이너 실행 명령
+# ✅ 9. 컨테이너 실행 시 워커 실행
 CMD ["sh", "-c", "python r2_worker.py"]
+
+# ✅ (선택) 10. 비루트 사용자로 실행 - 보안 강화
+# USER appuser
