@@ -51,7 +51,7 @@ jobs:
             cd ~/deploy/cache
 
             # ✅ 최신 Docker 설치 (공식 스크립트 사용)
-            curl -fsSL https://get.docker.com | sh
+            #curl -fsSL https://get.docker.com | sh
 
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 

@@ -1,5 +1,7 @@
 # apps/worker/dragonfly-worker-compose.yml
 services:
+  env_file:
+    - ../../.env  # ← infra/oci 기준으로 상대경로 설정 필요
   dragonfly:
     image: docker.dragonflydb.io/dragonflydb/dragonfly
     container_name: dragonfly
