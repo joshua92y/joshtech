@@ -1,6 +1,6 @@
 # app/utils/scheduler.py
 from apscheduler.schedulers.background import BackgroundScheduler
-from .ping_flyio import ping_render
+from .ping_render import ping_render
 from pathlib import Path
 import logging
 import asyncio
