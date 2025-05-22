@@ -37,6 +37,7 @@ COPY packages/shared_schemas /shared_schemas
 
 # ✅ shared_schemas를 PYTHONPATH에 등록 (FastAPI에서도 참조 가능)
 ENV PYTHONPATH="${PYTHONPATH}:/shared_schemas"
+ENV PYTHONPATH="${PYTHONPATH}:/shared_queue"
 
 # ✅ staticfiles 디렉토리 생성 및 정적 파일 수집
 RUN mkdir -p /app/staticfiles && \

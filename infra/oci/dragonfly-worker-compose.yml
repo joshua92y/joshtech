@@ -7,8 +7,8 @@ services:
       - '6379:6379'
 
   r2_worker:
-    image: ghcr.io/joshua92y/r2-worker:latest
-    container_name: r2_worker
+    image: ghcr.io/joshua92y/worker:latest
+    container_name: worker
     restart: always
     depends_on:
       - dragonfly
