@@ -12,6 +12,7 @@ services:
   r2_worker:
     image: ghcr.io/joshua92y/worker:latest
     container_name: worker
+    platform: linux/arm64
     restart: always
     depends_on:
       - dragonfly

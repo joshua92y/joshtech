@@ -1,6 +1,6 @@
 # apps/worker/Dockerfile.worker
-# ✅ 멀티 아키텍처 대응: buildx에서 플랫폼 자동 적용 가능
-FROM --platform=$BUILDPLATFORM python:3.11-slim
+# ✅ 1. Python 슬림 이미지 사용 (빌드 속도/용량 최적화)
+FROM python:3.11-slim
 
 # ✅ 빌드 도구 및 psycopg2 등 C 확장 모듈 빌드에 필요한 패키지 설치
 RUN apt-get update && apt-get install -y \
