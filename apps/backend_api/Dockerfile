@@ -1,3 +1,4 @@
+# ✅ apps/backend_api/Dockerfile
 # ✅ 1. Python 슬림 이미지 사용 (빌드 속도/용량 최적화)
 FROM python:3.11-slim
 

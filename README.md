@@ -76,3 +76,6 @@ cat ./id_rsa | clip
 ssh -i .\id_rsa ubuntu@152.69.233.183 #fastapi
 ssh -i .\id_rsa ubuntu@158.180.87.55 #cache
 docker logs -f dragonfly
+docker run -it --rm ghcr.io/joshua92y/worker:latest bash # 도커 컨테이너 접속
+docker inspect worker #도커 상세 정보
+docker ps #활성화 도커 확인

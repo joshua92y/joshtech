@@ -35,6 +35,7 @@ services:
       - 'traefik.http.routers.api-secure.tls=true'
       - 'traefik.http.routers.api-secure.tls.certresolver=myresolver'
     environment:
-      - REDIS_HOST=158.180.87.55
+      - REDIS_HOST=10.0.10.193
       - REDIS_PORT=6379
+      - DRAGONFLY_URL=redis://10.0.10.193:6379
     restart: always

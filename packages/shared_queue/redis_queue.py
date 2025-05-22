@@ -17,7 +17,7 @@ class BaseQueue(ABC):
 # ✅ Redis 구현체
 class RedisQueue(BaseQueue):
     def __init__(self, redis_url: str = None, queue_name: str = "delete_queue"):
-        redis_url = redis_url or os.getenv("DRAGONFLY_URL", "redis://localhost:6379")
+        redis_url = redis_url or os.getenv("DRAGONFLY_URL", "redis://127.0.0.1:6379")
         self.redis = Redis.from_url(redis_url, decode_responses=True)
         self.queue_name = queue_name
 

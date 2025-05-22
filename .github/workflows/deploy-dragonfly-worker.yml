@@ -36,6 +36,8 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/worker:latest
           platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: 📤 Upload docker-compose to cache VM
         uses: appleboy/scp-action@v0.1.7
@@ -56,10 +58,10 @@ jobs:
           port: 22
           script: |
             cd ~/deploy/cache
-
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             cat <<EOF > infra/oci/.env
+            DRAGONFLY_URL=redis://dragonfly:6379
             R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
             R2_BUCKET=${{ secrets.R2_BUCKET }}
             R2_ACCESS_KEY=${{ secrets.R2_ACCESS_KEY }}
