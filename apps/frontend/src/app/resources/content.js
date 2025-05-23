@@ -30,12 +30,12 @@ const social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system/nextjs-starter",
+    link: "https://github.com/joshua92y/joshtech",
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
+    link: "https://www.linkedin.com/in/joshua-yoon-1bb7a4365/",
   },
   {
     name: "X",
@@ -55,22 +55,26 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>From invisible logic to visible beauty <br />I connect the two worlds.</>,
   featured: {
     display: true,
     title: (
       <>
-        Recent project: <strong className="ml-4">Once UI</strong>
+        Recent project: <strong className="ml-4">joshtech</strong>
       </>
     ),
     href: "/work/building-once-ui-a-customizable-design-system",
   },
   subline: (
     <>
-      I&apos;m Selene, a design engineer at{" "}
+      I&apos;m Joshua, a full stack engineer at{" "}
       <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }} />
       , where I craft intuitive
-      <br /> user experiences. After hours, I build my own projects.
+      <br /> user experiences. After hours, I build my own projects. I&apos;m also a student at KAIST, where I study computer science and engineering.
+      <a href="https://www.korea.ac.kr/index.do" target="_blank" rel="noopener noreferrer">
+        Korea Advanced Institute of Science and Technology
+      </a>
+      .
     </>
   ),
 };
