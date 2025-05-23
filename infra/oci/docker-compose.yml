@@ -34,6 +34,8 @@ services:
       - 'traefik.http.routers.api-secure.entrypoints=websecure'
       - 'traefik.http.routers.api-secure.tls=true'
       - 'traefik.http.routers.api-secure.tls.certresolver=myresolver'
+    env_file:
+      - .env
     environment:
       - REDIS_HOST=10.0.10.193
       - REDIS_PORT=6379
