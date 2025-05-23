@@ -85,7 +85,7 @@ jobs:
           script: |
             cd ~/deploy/joshtech
 
-            cat <<EOF > infra/oci/.env
+            cat <<EOF > .env
             DRAGONFLY_URL=redis://dragonfly:6379
             R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
             R2_BUCKET=${{ secrets.R2_BUCKET }}
