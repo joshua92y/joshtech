@@ -80,3 +80,4 @@ docker run -it --rm ghcr.io/joshua92y/worker:latest bash # 도커 컨테이너 �
 docker inspect worker #도커 상세 정보
 docker ps #활성화 도커 확인
 docker logs -f <이름># 로그 보는법
+docker exec -it <컨테이너\_ID_or_NAME> env
