@@ -70,7 +70,8 @@ const home = {
       I&apos;m joshua, a Full stack engineer at{" "}
       <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }} />
       , where I craft intuitive
-      <br /> user experiences. After hours, I build my own projects. I&apos;m also a student at KAIST, where I study computer science and engineering.
+      <br /> user experiences. After hours, I build my own projects. I&apos;m also a student at
+      KAIST, where I study computer science and engineering.
       <a href="https://www.korea.ac.kr/index.do" target="_blank" rel="noopener noreferrer">
         Korea Advanced Institute of Science and Technology
       </a>

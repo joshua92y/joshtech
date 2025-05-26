@@ -1,4 +1,2 @@
 
-/og      https://api.joshuatech.dev/og    200
-/blog/*  /blog/index.html                 200
-/about   /team                            301
+/og      https://api.joshuatech.dev/front/og    200

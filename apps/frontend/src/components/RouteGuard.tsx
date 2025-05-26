@@ -49,7 +49,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
       if (protectedRoutes[pathname as keyof typeof protectedRoutes]) {
         setIsPasswordRequired(true);
 
-        const response = await fetch("https://api.joshuatech.dev/check-auth", {
+        const response = await fetch("https://api.joshuatech.dev/security/check-auth", {
           method: "GET",
           credentials: "include", // 쿠키 기반 인증이면 반드시 필요!
         });
@@ -65,9 +65,10 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   }, [pathname]);
 
   const handlePasswordSubmit = async () => {
-    const response = await fetch("/api/authenticate", {
+    const response = await fetch("https://api.joshuatech.dev/security/authenticate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ password }),
     });
 

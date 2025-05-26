@@ -1,0 +1,16 @@
+# Python 파일 무시 (Prettier가 포맷하지 않게 함)
+*.py
+**/*.py
+
+# Ignore build artifacts
+build/
+out/
+.next/
+dist/
+node_modules/
+.venv/
+__pycache__/
+
+# Ignore IDE/project files
+.vscode/
+*.log

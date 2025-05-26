@@ -13,11 +13,11 @@ def check_auth(authToken: str = Cookie(default=None)):
     return JSONResponse(content={"authenticated": False}, status_code=401)
 
 
-@router.post("/check-auth")
-async def check_auth(request: Request):
+@router.post("/authenticate")
+async def authenticate(request: Request):
     body = await request.json()
     password = body.get("password")
-    correct_password = os.getenv("PAGE_ACCESS_PASSWORD")
+    correct_password = os.getenv("PAGE_ACCESS_PASSWORD", "2025")
 
     if not correct_password:
         raise HTTPException(status_code=500, detail="Server misconfigured")
@@ -30,10 +30,12 @@ async def check_auth(request: Request):
             key="authToken",
             value="authenticated",
             httponly=True,
-            secure=os.getenv("ENV") == "production",  # 또는 직접 NODE_ENV로
+            # Debug가 False일 경우 https만 쿠키 허용
+            secure=os.getenv("DEBUG", "true") == "false",
             max_age=60 * 60,
-            samesite="strict",
+            samesite="none",
             path="/",
+            domain="joshuatech.dev",
         )
         return response
     else:
