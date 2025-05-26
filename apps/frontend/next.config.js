@@ -12,6 +12,9 @@ const baseConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   output: "export",
   trailingSlash: true,
+  experimental: {
+    skipTrailingSlashRedirect: true, // /about → /about/ 자동 리디렉션 방지
+  },
   async rewrites() {
     return [
       {
