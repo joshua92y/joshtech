@@ -1,0 +1,56 @@
+---
+title: "Building an AI-Powered Market Analysis & Chatbot System"
+publishedAt: "2025-06-20"
+summary: "Development of a market insight system using XGBoost for regional analysis, React for UI, Django for orchestration, and LangChain-powered chatbot integrated with Korean embedding models."
+images:
+  - "https://i.namu.wiki/i/9DZwokY8fdseStWeo2wiORIRLJxfyNEzb7e1Taum0RlPGh4Dsi7sQ6jjWd11vcXGlO1iXEnxgdajfUVMdRRPJYc8SuGl5zDOrawhVqDrmVoKeFMO4g5ekm_P7-d8EIJHOqeqt1UWmKQq4S6xyhStHg.webp"
+  - "/images/projects/project-01/cover-02.jpg"
+  - "/images/projects/project-01/cover-03.jpg"
+team:
+  - name: "Joshua Yoon"
+    role: "Project Manager"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/company/once-ui/"
+  - name: "Sanghwa Sin"
+    role: "Backend Engineer"
+    avatar: "/images/projects/project-01/avatar-01.jpg"
+    linkedIn: "https://www.linkedin.com/company/once-ui/"
+---
+
+## Overview
+
+We developed an end-to-end AI-driven market analysis platform that leverages XGBoost to extract insights from commercial area data. The system delivers customized reports to users and provides conversational explanations via a LangChain-powered chatbot. This solution bridges data science and user experience, enabling business owners and planners to understand their market potential quickly.
+
+## Key Features
+
+-**Market Analysis Engine**: Utilized XGBoost for analyzing regional data trends and predicting commercial viability based on foot traffic, demographic information, and historical performance.
+
+-**Chatbot Integration**: Powered by LangChain and the upskyy/bge-m3-korean embedding model, the chatbot delivers conversational explanations of analytical results, providing a natural and engaging UX.
+
+-**Report Generation**: Automatically generates user-specific reports with actionable insights, visualizations, and market segmentation.
+
+-**Frontend Interface**: Designed with React and prototyped in Figma for a responsive, intuitive UI that integrates seamlessly with backend APIs.
+
+-**Backend Framework**: Orchestrated with Django to manage data pipelines, user requests, and model inference workflows.
+
+## Technologies Used
+
+-**XGBoost**: For tabular data analysis and prediction.
+
+-**LangChain**: To implement the reasoning layer for chatbot interaction.
+
+-**BGE-M3-Korean (upskyy)**: A state-of-the-art Korean embedding model for document retrieval and semantic similarity.
+
+-**Django**: For backend orchestration and API development.
+
+-**React**: For building the interactive frontend interface.
+
+-**Figma** For UI/UX design and prototyping.
+
+## Challenges and Learnings
+
+Integrating machine learning models with real-time user interaction posed challenges in performance and architecture. We solved this by designing asynchronous workflows between Django views and LangChain chains, using efficient vector search techniques. Balancing technical accuracy and user-friendly conversation flow was another learning curve, which we addressed by fine-tuning prompt engineering and embedding retrieval logic.
+
+## Outcome
+
+The platform is actively used for business planning and consulting. It significantly reduces the time required for market research and allows users to get immediate insights and answers via the chatbot. It has improved the decision-making process for small business owners and analysts alike, and serves as a scalable foundation for future market intelligence tools.

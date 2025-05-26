@@ -30,7 +30,7 @@ const social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system/nextjs-starter",
+    link: "https://github.com/joshua92y/",
   },
   {
     name: "LinkedIn",
@@ -55,19 +55,19 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Crafting the unseen. Delivering the seen. Bridging systems and stories.</>,
   featured: {
     display: true,
     title: (
       <>
-        Recent project: <strong className="ml-4">Once UI</strong>
+        Recent project: <strong className="ml-4">AI-Powered Market Analysis & Chatbot</strong>
       </>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work/building-an-ai-powered-market-analysis-chatbot-system",
   },
   subline: (
     <>
-      I&apos;m Selene, a design engineer at{" "}
+      I&apos;m joshua, a Full stack engineer at{" "}
       <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }} />
       , where I craft intuitive
       <br /> user experiences. After hours, I build my own projects.
