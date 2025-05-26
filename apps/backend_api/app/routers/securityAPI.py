@@ -30,8 +30,8 @@ async def authenticate(request: Request):
             key="authToken",
             value="authenticated",
             httponly=True,
-            # Debug가 False일 경우 https만 쿠키 허용
-            secure=os.getenv("DEBUG", "true") == "false",
+            # secure가 True일 경우 https만 쿠키 허용
+            secure=True,
             max_age=60 * 60,
             samesite="none",
             path="/",
