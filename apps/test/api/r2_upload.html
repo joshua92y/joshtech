@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R2 스토리지 업로드 테스트</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .upload-area {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        text-align: center;
+        margin: 20px 0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .upload-area:hover {
+        border-color: #666;
+      }
+      .file-list {
+        margin-top: 20px;
+      }
+      .file-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+      .file-item:last-child {
+        border-bottom: none;
+      }
+      .progress-bar {
+        width: 100%;
+        height: 20px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+      .progress {
+        width: 0%;
+        height: 100%;
+        background-color: #4caf50;
+        transition: width 0.3s ease;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>R2 스토리지 업로드 테스트</h1>
+
+      <div class="upload-area" id="dropZone">
+        <p>파일을 여기에 드래그하거나 클릭하여 선택하세요</p>
+        <input type="file" id="fileInput" style="display: none" />
+      </div>
+
+      <div class="file-list" id="fileList"></div>
+    </div>
+
+    <script>
+      const API_URL = 'https://api.joshtech.dev'; // FastAPI 서버 URL
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const fileList = document.getElementById('fileList');
+
+      // 드래그 앤 드롭 이벤트 처리
+      dropZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#4CAF50';
+      });
+
+      dropZone.addEventListener('dragleave', e => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#ccc';
+      });
+
+      dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#ccc';
+        const files = e.dataTransfer.files;
+        handleFiles(files);
+      });
+
+      // 클릭으로 파일 선택
+      dropZone.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', e => {
+        handleFiles(e.target.files);
+      });
+
+      async function handleFiles(files) {
+        for (const file of files) {
+          await uploadFile(file);
+        }
+      }
+
+      async function uploadFile(file) {
+        // 파일 아이템 생성
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `
+                <div style="flex-grow: 1;">
+                    <div>${file.name}</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            `;
+        fileList.appendChild(fileItem);
+        const progressBar = fileItem.querySelector('.progress');
+
+        try {
+          // 1. 업로드 URL 요청
+          const uploadUrlResponse = await fetch(`${API_URL}/r2/upload-url`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              filename: file.name,
+              content_type: file.type,
+            }),
+          });
+
+          if (!uploadUrlResponse.ok) {
+            throw new Error('업로드 URL 요청 실패');
+          }
+
+          const { upload_url, key } = await uploadUrlResponse.json();
+
+          // 2. 파일 업로드
+          const uploadResponse = await fetch(upload_url, {
+            method: 'PUT',
+            body: file,
+            headers: {
+              'Content-Type': file.type,
+            },
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('파일 업로드 실패');
+          }
+
+          // 3. 업로드 완료 콜백
+          const callbackResponse = await fetch(`${API_URL}/r2/upload-callback`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              key: key,
+              filename: file.name,
+              content_type: file.type,
+              size: file.size,
+            }),
+          });
+
+          if (!callbackResponse.ok) {
+            throw new Error('업로드 콜백 실패');
+          }
+
+          progressBar.style.width = '100%';
+          progressBar.style.backgroundColor = '#4CAF50';
+          fileItem.innerHTML += '<span style="color: #4CAF50; margin-left: 10px;">✓</span>';
+        } catch (error) {
+          console.error('업로드 에러:', error);
+          progressBar.style.backgroundColor = '#f44336';
+          fileItem.innerHTML += `<span style="color: #f44336; margin-left: 10px;">❌ ${error.message}</span>`;
+        }
+      }
+    </script>
+  </body>
+</html>

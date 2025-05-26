@@ -84,6 +84,16 @@ jobs:
           port: 22
           script: |
             cd ~/deploy/joshtech
+
+            cat <<EOF > .env
+            DRAGONFLY_URL=redis://dragonfly:6379
+            R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
+            R2_BUCKET=${{ secrets.R2_BUCKET }}
+            R2_ACCESS_KEY=${{ secrets.R2_ACCESS_KEY }}
+            R2_SECRET_KEY=${{ secrets.R2_SECRET_KEY }}
+            DJANGO_API_URL=${{ secrets.DJANGO_API_URL }}
+            EOF
+
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             [ -f traefik/acme.json ] || sudo touch traefik/acme.json

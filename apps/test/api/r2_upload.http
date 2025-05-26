@@ -1,0 +1,21 @@
+### 🎯 1. 기본 업로드 요청 (로컬 파일 포함)
+PUT https://91738f...cloudflarestorage.com/joshtech/uploads/9f818f79....mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...&X-Amz-Signature=...
+Content-Type: video/mp4
+
+< ./test.mp4
+
+
+### 🖥️ 2. Windows 절대 경로에서 업로드
+PUT https://91738ffff95834c5972f1a92aac416a6.r2.cloudflarestorage.com/joshtech/uploads/48aae3ae1282465fb9a7580040630c88.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e893b4782c3fa8ae342e09549aabe2f6%2F20250523%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20250523T022004Z&X-Amz-Expires=600&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Signature=e5e01876178a1e9a9b937fae215108ad17f7fcc582e117f556e40af14489bb64
+Content-Type: video/mp4
+
+< C:\Users\wlsgh\OneDrive\바탕 화면\비.mp4
+
+
+### 🗂️ 3. 사용자 정의 메타데이터 포함 (x-amz-meta-* 헤더)
+PUT https://91738ffff95834c5972f1a92aac416a6.r2.cloudflarestorage.com/joshtech/uploads/9f818f79008c4beba5bbaf279c82578b.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e893b4782c3fa8ae342e09549aabe2f6%2F20250523%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20250523T020821Z&X-Amz-Expires=600&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Signature=caf6b79382faa75ee4b130df7ac2d14eb7cadad5d3c678c35eb1d45f4e822959
+Content-Type: video/mp4
+x-amz-meta-title:"Test Video"
+x-amz-meta-description: "R2 Test Video"
+
+< C:\Users\wlsgh\OneDrive\바탕 화면\비.mp4

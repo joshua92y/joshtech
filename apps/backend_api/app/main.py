@@ -6,6 +6,7 @@ from .utils.scheduler import start as start_scheduler
 from .middleware.auth_middleware import AuthMiddleware
 from .decorators.auth import auth_required
 from .deps.redis_client import redis_client
+from fastapi.middleware.cors import CORSMiddleware
 
 # .env 로드
 load_dotenv()
@@ -16,10 +17,31 @@ app = FastAPI(
     description="Developer portfolio API server (FastAPI) without Django",
     version="0.1.0",
 )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8000",
+        "https://api.joshtech.dev",
+        "https://joshtech.dev",
+        "https://mainapi.joshtech.dev",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.add_middleware(AuthMiddleware)
 
 # ✅ 라우터 등록(대소문자 주의)
-from .routers import contactAPI, projectAPI, resumeAPI, frontAPI, securityAPI, accounts, R2_Storage
+from .routers import (
+    contactAPI,
+    projectAPI,
+    resumeAPI,
+    frontAPI,
+    securityAPI,
+    accounts,
+    R2_Storage,
+)
 
 app.include_router(resumeAPI.router)
 app.include_router(projectAPI.router)
@@ -28,6 +50,7 @@ app.include_router(frontAPI.router)
 app.include_router(securityAPI.router)
 app.include_router(accounts.router)
 app.include_router(R2_Storage.router)
+
 
 # 기본 루트
 @app.get("/")

@@ -1,3 +1,4 @@
+# app/deps/auth.py
 from fastapi import Depends, HTTPException, Request
 import httpx
 import os

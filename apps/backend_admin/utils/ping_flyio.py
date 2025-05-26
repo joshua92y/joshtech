@@ -7,10 +7,10 @@ from django.conf import settings
 
 
 async def ping_flyio():
-    url = os.getenv("FASTAPI_URL", "https://api.joshtech.dev/healthz")
+    url = os.getenv("FASTAPI_URL_HEALTHZ", "https://api.joshuatech.dev/healthz")
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
             response = await client.get(url)
-            print(f"[Render → Fly] Ping OK: {response.status_code}")
+            print(f"[Render → OCI] Ping OK: {response.status_code}")
     except Exception as e:
-        print(f"[Render → Fly] Ping Error: {e}")
+        print(f"[Render → OCI] Ping Error: {e}")
