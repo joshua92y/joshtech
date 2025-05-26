@@ -30,11 +30,7 @@ const social = [
   {
     name: "GitHub",
     icon: "github",
-<<<<<<< HEAD
     link: "https://github.com/joshua92y/",
-=======
-    link: "https://github.com/joshua92y/joshtech",
->>>>>>> f10dfda96b5707c1ce0188b82a9bb761f61e555e
   },
   {
     name: "LinkedIn",
@@ -59,31 +55,19 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-<<<<<<< HEAD
   headline: <>Crafting the unseen. Delivering the seen. Bridging systems and stories.</>,
-=======
-  headline: <>From invisible logic to visible beauty <br />I connect the two worlds.</>,
->>>>>>> f10dfda96b5707c1ce0188b82a9bb761f61e555e
   featured: {
     display: true,
     title: (
       <>
-<<<<<<< HEAD
         Recent project: <strong className="ml-4">AI-Powered Market Analysis & Chatbot</strong>
-=======
-        Recent project: <strong className="ml-4">joshtech</strong>
->>>>>>> f10dfda96b5707c1ce0188b82a9bb761f61e555e
       </>
     ),
     href: "/work/building-an-ai-powered-market-analysis-chatbot-system",
   },
   subline: (
     <>
-<<<<<<< HEAD
       I&apos;m joshua, a Full stack engineer at{" "}
-=======
-      I&apos;m Joshua, a full stack engineer at{" "}
->>>>>>> f10dfda96b5707c1ce0188b82a9bb761f61e555e
       <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }} />
       , where I craft intuitive
       <br /> user experiences. After hours, I build my own projects. I&apos;m also a student at KAIST, where I study computer science and engineering.
