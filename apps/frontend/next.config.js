@@ -11,6 +11,7 @@ const withMDX = require("@next/mdx")({
 const baseConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   output: "export",
+  trailingSlash: true,
   async rewrites() {
     return [
       {
