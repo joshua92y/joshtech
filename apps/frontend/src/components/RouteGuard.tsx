@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { routes, protectedRoutes } from "@/app/resources";
-import {
-  Flex,
-  Spinner,
-  Button,
-  Heading,
-  Column,
-  PasswordInput,
-} from "@/once-ui/components";
+import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@/once-ui/components";
 import NotFound from "@/app/not-found";
 
 interface RouteGuardProps {
@@ -50,9 +43,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
         if (path in routes) return routes[path as keyof typeof routes];
 
         const dynamicRoutes = ["/blog", "/work"] as const;
-        return dynamicRoutes.some(
-          (route) => path.startsWith(route) && routes[route]
-        );
+        return dynamicRoutes.some((route) => path.startsWith(route) && routes[route]);
       };
 
       const routeEnabled = checkRouteEnabled(pathname);
@@ -63,13 +54,10 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
         setIsPasswordRequired(true);
 
         try {
-          const response = await fetch(
-            "https://api.joshuatech.dev/security/check-auth",
-            {
-              method: "GET",
-              credentials: "include", // ✅ 쿠키 포함 필수
-            }
-          );
+          const response = await fetch("https://api.joshuatech.dev/security/check-auth", {
+            method: "GET",
+            credentials: "include", // ✅ 쿠키 포함 필수
+          });
           setIsAuthenticated(response.ok); // 200이면 인증됨
         } catch (err) {
           console.error("❌ 인증 확인 실패:", err);
@@ -85,15 +73,12 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   // ✅ 비밀번호 제출 시 서버 인증 요청
   const handlePasswordSubmit = async () => {
     try {
-      const response = await fetch(
-        "https://api.joshuatech.dev/security/authenticate",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ password }),
-        }
-      );
+      const response = await fetch("https://api.joshuatech.dev/security/authenticate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ password }),
+      });
 
       if (response.ok) {
         setIsAuthenticated(true);

@@ -12,7 +12,7 @@ const baseConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   output: "export",
   //rewrites 는 향후 nextjs ssr 활성화시 적용
-  async redirects() {
+  async rewrites() {
     return [
       {
         source: "/og",
