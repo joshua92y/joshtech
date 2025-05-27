@@ -1,3 +1,4 @@
+// src/components/RouteGuard.tsx
 "use client";
 
 import { useState, useEffect } from "react";
