@@ -9,6 +9,7 @@ on:
       - '.github/workflows/deploy-fastapi-ghcr.yml'
       - 'infra/oci/docker-compose.yml'
       - 'infra/oci/traefik/traefik.yml'
+      - 'infra/oci/traefik/traefik_dynamic.yml'
   workflow_dispatch:
 
 jobs:
@@ -70,6 +71,19 @@ jobs:
           key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
           port: 22
           source: infra/oci/traefik/traefik.yml
+          target: ~/deploy/joshtech/
+          strip_components: 2
+          overwrite: true
+          debug: true
+
+      - name: 📤 Upload traefik_dynamic.yml to OCI server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.OCI_HOST_FASTAPI_VM }}
+          username: ubuntu
+          key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          port: 22
+          source: infra/oci/traefik/traefik_dynamic.yml
           target: ~/deploy/joshtech/
           strip_components: 2
           overwrite: true

@@ -15,6 +15,7 @@ services:
       - '8080:8080'
     volumes:
       - './traefik/traefik.yml:/etc/traefik/traefik.yml'
+      - './traefik/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml'
       - './traefik/acme.json:/letsencrypt/acme.json'
       - '/var/run/docker.sock:/var/run/docker.sock'
     restart: always

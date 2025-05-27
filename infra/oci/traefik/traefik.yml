@@ -29,7 +29,7 @@ providers:
     exposedByDefault: false # 기본적으로 모든 컨테이너 비노출 (라벨 필요)
     network: bridge
   file:
-    filename: /etc/traefik/traefik.yml
+    filename: /etc/traefik/traefik_dynamic.yml
     watch: true
 
 certificatesResolvers:
@@ -39,28 +39,4 @@ certificatesResolvers:
       storage: /letsencrypt/acme.json # 인증서 저장 위치
       tlsChallenge: true # 포트 443 기반 인증
       caServer: https://acme-v02.api.letsencrypt.org/directory # Let's Encrypt production 서버
-
-http:
-  middlewares:
-    cors-headers:
-      headers:
-        accessControlAllowOriginList:
-          - https://joshuatech.dev
-          - http://localhost:3000  # 개발 환경용
-        accessControlAllowMethods:
-          - GET
-          - POST
-          - PUT
-          - DELETE
-          - PATCH
-          - OPTIONS
-        accessControlAllowHeaders:
-          - Authorization
-          - Content-Type
-          - X-Requested-With
-          - Accept
-          - Origin
-          - X-CSRF-Token
-        accessControlAllowCredentials: true
-        accessControlMaxAge: 86400  # 24시간
 

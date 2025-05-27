@@ -1,0 +1,25 @@
+# infra/oci/traefik/traefik_dynamic.yml
+
+http:
+  middlewares:
+    cors-headers:
+      headers:
+        accessControlAllowOriginList:
+          - https://joshuatech.dev
+          - http://localhost:3000  # 개발 환경용
+        accessControlAllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          - OPTIONS
+        accessControlAllowHeaders:
+          - Authorization
+          - Content-Type
+          - X-Requested-With
+          - Accept
+          - Origin
+          - X-CSRF-Token
+        accessControlAllowCredentials: true
+        accessControlMaxAge: 86400  # 24시간
