@@ -18,6 +18,8 @@ services:
       - './traefik/acme.json:/letsencrypt/acme.json'
       - '/var/run/docker.sock:/var/run/docker.sock'
     restart: always
+    labels:
+      - "traefik.http.routers.api-secure.middlewares=cors-headers@file"
 
   fastapi:
     image: ghcr.io/joshua92y/joshtech-fastapi:latest

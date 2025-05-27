@@ -20,19 +20,6 @@ app = FastAPI(
 
 app.add_middleware(AuthMiddleware)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8000",
-        "https://api.joshtech.dev",
-        "https://joshtech.dev",
-        "https://mainapi.joshtech.dev",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # ✅ 라우터 등록(대소문자 주의)
 from .routers import (
     contactAPI,
