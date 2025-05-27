@@ -19,7 +19,14 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
     restart: always
     labels:
-      - "traefik.http.routers.api-secure.middlewares=cors-headers@file"
+      # Traefik 대시보드 라우터 설정
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.joshuatech.dev`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
+      - "traefik.http.routers.dashboard.middlewares=cors-headers@file"
 
   fastapi:
     image: ghcr.io/joshua92y/joshtech-fastapi:latest
@@ -36,6 +43,7 @@ services:
       - 'traefik.http.routers.api-secure.entrypoints=websecure'
       - 'traefik.http.routers.api-secure.tls=true'
       - 'traefik.http.routers.api-secure.tls.certresolver=myresolver'
+      - 'traefik.http.routers.api-secure.middlewares=cors-headers@file'
     env_file:
       - .env
     environment:
