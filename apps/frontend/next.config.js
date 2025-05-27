@@ -11,7 +11,8 @@ const withMDX = require("@next/mdx")({
 const baseConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   output: "export",
-  async rewrites() {
+  //rewrites 는 향후 nextjs ssr 활성화시 적용
+  async redirects() {
     return [
       {
         source: "/og",

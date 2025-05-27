@@ -25,6 +25,9 @@ jobs:
         with:
           node-version: 22.15.0
 
+      - name: 🚀 Upgrade npm to latest
+        run: npm install -g npm@latest
+        
       - name: 🗂️ Cache NPM & Next.js build
         uses: actions/cache@v4
         with:
