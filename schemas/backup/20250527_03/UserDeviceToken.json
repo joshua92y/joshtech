@@ -13,7 +13,7 @@
     "uuid": {
       "type": "string",
       "title": "uuid",
-      "default": "2c489396-cf31-4e31-b4d8-0391f66299fa"
+      "default": "a96a0940-fc1b-4c3c-a8c2-c07175fccc57"
     },
     "jti": {
       "type": "string",
@@ -28,13 +28,13 @@
       "type": "string",
       "title": "created at",
       "format": "date-time",
-      "default": "2025-05-17 06:03:41.826700+00:00"
+      "default": "2025-05-27 08:10:23.657494+00:00"
     },
     "last_used_at": {
       "type": "string",
       "title": "last used at",
       "format": "date-time",
-      "default": "2025-05-17 06:03:41.826724+00:00"
+      "default": "2025-05-27 08:10:23.657512+00:00"
     },
     "is_active": {
       "type": "boolean",

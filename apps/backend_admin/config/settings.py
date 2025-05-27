@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "resume",
     "projects",
     "contact",
+    "content",
     "accounts",
     # DRF 및 인증
     "rest_framework",

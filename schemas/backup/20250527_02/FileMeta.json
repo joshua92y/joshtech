@@ -67,6 +67,22 @@
       "title": "purged at",
       "format": "date-time",
       "nullable": true
+    },
+    "restored_at": {
+      "type": "string",
+      "title": "restored at",
+      "format": "date-time",
+      "nullable": true
+    },
+    "restored_by": {
+      "type": "string",
+      "title": "restored by",
+      "nullable": true
+    },
+    "restored_from": {
+      "type": "string",
+      "title": "restored from",
+      "nullable": true
     }
   },
   "required": [
