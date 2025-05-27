@@ -28,6 +28,9 @@ providers:
     endpoint: 'unix:///var/run/docker.sock'
     exposedByDefault: false # 기본적으로 모든 컨테이너 비노출 (라벨 필요)
     network: bridge
+  file:
+    filename: /etc/traefik/traefik.yml
+    watch: true
 
 certificatesResolvers:
   myresolver:
