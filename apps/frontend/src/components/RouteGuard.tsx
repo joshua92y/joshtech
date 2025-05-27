@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { routes, protectedRoutes } from "@/app/resources";
-import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@/once-ui/components";
+import {
+  Flex,
+  Spinner,
+  Button,
+  Heading,
+  Column,
+  PasswordInput,
+} from "@/once-ui/components";
 import NotFound from "@/app/not-found";
 
 interface RouteGuardProps {
@@ -10,55 +17,58 @@ interface RouteGuardProps {
 }
 
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
-  const [pathname, setPathname] = useState(""); // 현재 경로 저장용
-  const [isRouteEnabled, setIsRouteEnabled] = useState(false); // 유효한 경로인지 여부
-  const [isPasswordRequired, setIsPasswordRequired] = useState(false); // 비밀번호 보호 여부
+  const [pathname, setPathname] = useState(""); // 현재 경로
+  const [isRouteEnabled, setIsRouteEnabled] = useState(false); // 라우팅 허용 여부
+  const [isPasswordRequired, setIsPasswordRequired] = useState(false); // 보호 여부
   const [isAuthenticated, setIsAuthenticated] = useState(false); // 인증 상태
   const [password, setPassword] = useState(""); // 입력된 비밀번호
   const [error, setError] = useState<string | undefined>(undefined); // 에러 메시지
-  const [loading, setLoading] = useState(true); // 전체 로딩 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
 
-  // ✅ 클라이언트에서 window 객체를 통해 현재 경로를 설정
+  // ✅ 경로 초기 추출 (CSR only)
   useEffect(() => {
     if (typeof window !== "undefined") {
       setPathname(window.location.pathname);
     }
   }, []);
 
-  // ✅ 경로가 바뀔 때마다 라우팅/인증 상태 확인
+  // ✅ 경로 변경 감지 → 보호 여부 및 인증 확인
   useEffect(() => {
     if (!pathname) return;
 
     const performChecks = async () => {
       setLoading(true);
 
-      // ✅ 이전 상태 초기화 (다른 경로로 전환될 경우를 대비)
+      // 상태 초기화
       setIsRouteEnabled(false);
       setIsPasswordRequired(false);
       setIsAuthenticated(false);
       setError(undefined);
 
-      // ✅ 정적 routes 또는 dynamicRoutes에 포함되어 있는지 확인
+      // 정적 또는 동적 라우트 여부 확인
       const checkRouteEnabled = (path: string): boolean => {
         if (path in routes) return routes[path as keyof typeof routes];
 
         const dynamicRoutes = ["/blog", "/work"] as const;
-        return dynamicRoutes.some((route) => path.startsWith(route) && routes[route]);
+        return dynamicRoutes.some(
+          (route) => path.startsWith(route) && Boolean(routes[route])
+        );
       };
 
       const routeEnabled = checkRouteEnabled(pathname);
       setIsRouteEnabled(routeEnabled);
 
-      // ✅ 보호된 경로인 경우 인증 상태 확인 요청
+      // ✅ 보호된 경로일 경우만 인증 확인
       if (protectedRoutes[pathname as keyof typeof protectedRoutes]) {
         setIsPasswordRequired(true);
 
         try {
           const response = await fetch("https://api.joshuatech.dev/security/check-auth", {
             method: "GET",
-            credentials: "include", // ✅ 쿠키 포함 필수
+            credentials: "include",
           });
-          setIsAuthenticated(response.ok); // 200이면 인증됨
+
+          setIsAuthenticated(response.ok); // 200이면 인증 완료
         } catch (err) {
           console.error("❌ 인증 확인 실패:", err);
         }
@@ -70,7 +80,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     performChecks();
   }, [pathname]);
 
-  // ✅ 비밀번호 제출 시 서버 인증 요청
+  // ✅ 비밀번호 제출 → 인증 API 호출
   const handlePasswordSubmit = async () => {
     try {
       const response = await fetch("https://api.joshuatech.dev/security/authenticate", {
@@ -91,7 +101,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     }
   };
 
-  // ✅ 로딩 중일 때 스피너 표시
+  // ✅ 로딩 중
   if (loading) {
     return (
       <Flex fillWidth paddingY="128" horizontal="center">
@@ -100,12 +110,12 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     );
   }
 
-  // ✅ 허용되지 않은 경로일 경우 NotFound 컴포넌트 표시
+  // ✅ 비허용 경로
   if (!isRouteEnabled) {
     return <NotFound />;
   }
 
-  // ✅ 인증이 필요한 경로지만 인증되지 않은 경우 비밀번호 폼 표시
+  // ✅ 보호된 경로지만 인증되지 않음 → 비밀번호 폼
   if (isPasswordRequired && !isAuthenticated) {
     return (
       <Column paddingY="128" maxWidth={24} gap="24" center>
@@ -126,7 +136,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     );
   }
 
-  // ✅ 인증 통과 및 경로 유효 → 원래 콘텐츠 렌더링
+  // ✅ 통과 시 children 렌더링
   return <>{children}</>;
 };
 
