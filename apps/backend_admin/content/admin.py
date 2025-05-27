@@ -17,10 +17,10 @@ class MarkdownPostAdmin(admin.ModelAdmin):
             "fields": ("title", "slug", "summary", "content", "tag", "author")
         }),
         ("미디어", {
-            "fields": ("image", "formatted_images")
+            "fields": ("image", "formatted_images","images")
         }),
         ("링크 및 팀", {
-            "fields": ("link", "formatted_team")
+            "fields": ("link", "formatted_team","team")
         }),
         ("게시 상태", {
             "fields": ("is_published", "published_at", "created_at", "updated_at")

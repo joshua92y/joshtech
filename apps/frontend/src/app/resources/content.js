@@ -70,7 +70,8 @@ const home = {
       I&apos;m joshua, a Full stack engineer at{" "}
       <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }} />
       , where I craft intuitive
-      <br /> user experiences. After hours, I build my own projects. I enjoy studying in unfamiliar places to gain new inspiration.
+      <br /> user experiences. After hours, I build my own projects. I enjoy studying in unfamiliar
+      places to gain new inspiration.
       <br />
       <a href="https://joshuatech.dev/blog" target="_blank" rel="noopener noreferrer">
         - View my development notes and learnings

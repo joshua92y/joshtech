@@ -1,0 +1,83 @@
+{
+  "title": "MarkdownPost",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "title": {
+      "type": "string",
+      "title": "title"
+    },
+    "slug": {
+      "type": "string",
+      "title": "slug"
+    },
+    "summary": {
+      "type": "string",
+      "title": "summary"
+    },
+    "content": {
+      "type": "string",
+      "title": "content"
+    },
+    "image": {
+      "type": "string",
+      "title": "image",
+      "nullable": true
+    },
+    "images": {
+      "type": "object",
+      "title": "images",
+      "default": [],
+      "nullable": true
+    },
+    "tag": {
+      "type": "string",
+      "title": "tag"
+    },
+    "link": {
+      "type": "string",
+      "title": "link",
+      "nullable": true
+    },
+    "team": {
+      "type": "object",
+      "title": "team",
+      "default": [],
+      "nullable": true
+    },
+    "author": {
+      "type": "integer",
+      "title": "author"
+    },
+    "is_published": {
+      "type": "boolean",
+      "title": "is published",
+      "default": false
+    },
+    "published_at": {
+      "type": "string",
+      "title": "published at",
+      "format": "date-time",
+      "nullable": true
+    },
+    "created_at": {
+      "type": "string",
+      "title": "created at",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "title": "updated at",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "title",
+    "content",
+    "author",
+    "is_published"
+  ]
+}

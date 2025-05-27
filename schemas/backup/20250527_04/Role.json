@@ -1,0 +1,21 @@
+{
+  "title": "Role",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID"
+    },
+    "name": {
+      "type": "string",
+      "title": "name"
+    },
+    "description": {
+      "type": "string",
+      "title": "description"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

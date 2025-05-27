@@ -3,7 +3,11 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.utils import timezone
+from django_json_widget.widgets import JSONEditorWidget
 
+formfield_overrides = {
+    models.JSONField: {'widget': JSONEditorWidget(mode='code', height='300px')}
+}
 
 class MarkdownPost(models.Model):
     # ✅ 콘텐츠 및 메타정보
