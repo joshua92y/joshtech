@@ -17,7 +17,7 @@ def check_auth(authToken: str = Cookie(default=None)):
 async def authenticate(request: Request):
     body = await request.json()
     password = body.get("password")
-    correct_password = os.getenv("PAGE_ACCESS_PASSWORD", "2025")
+    correct_password = os.getenv("PAGE_ACCESS_PASSWORD")
 
     if not correct_password:
         raise HTTPException(status_code=500, detail="Server misconfigured")

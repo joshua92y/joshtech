@@ -11,7 +11,7 @@ COPY ./package.json ./package-lock.json ./
 #COPY ./next.config.js ./
 # 종속성 설치 (개발 의존성 포함)
 RUN npm ci
-
+RUN npm install -g npm@latest
 # 전체 소스 복사 (이 Dockerfile이 apps/frontend 안에 있기 때문에 . 기준)
 COPY . .
 
