@@ -32,7 +32,7 @@ async def authenticate(request: Request):
             httponly=True,
             # secure가 True일 경우 https만 쿠키 허용
             secure=True,
-            max_age=60 * 60,
+            #max_age=60 * 60, 세션 쿠키로 변환
             samesite="none",
             path="/",
             domain="joshuatech.dev",
