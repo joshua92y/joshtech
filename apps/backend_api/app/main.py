@@ -17,6 +17,9 @@ app = FastAPI(
     description="Developer portfolio API server (FastAPI) without Django",
     version="0.1.0",
 )
+
+app.add_middleware(AuthMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -29,8 +32,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.add_middleware(AuthMiddleware)
 
 # ✅ 라우터 등록(대소문자 주의)
 from .routers import (
