@@ -10,8 +10,7 @@ const withMDX = require("@next/mdx")({
 /** @type {import('next').NextConfig} */
 const baseConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
-  output: "export",
-  //rewrites 는 향후 nextjs ssr 활성화시 적용
+  // output: 'export',
   async rewrites() {
     return [
       {
@@ -27,6 +26,11 @@ const baseConfig = {
   },
   images: {
     unoptimized: true,
+  },
+  experimental: {
+    runtime: "edge", // ✅ Cloudflare Pages + Functions 필수
+    appDir: true, // ✅ App Router 사용 시
+    serverActions: true, // ✅ 필요 시 활성화
   },
   turbopack: {
     rules: {

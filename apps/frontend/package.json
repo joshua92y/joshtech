@@ -43,6 +43,7 @@
     "wrangler": "^4.14.4"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.12",
     "@csstools/postcss-global-data": "latest",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/cli": "^4.1.6",
