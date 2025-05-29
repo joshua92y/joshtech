@@ -1,11 +1,11 @@
-name = "my-next-cloudflare-app"
-compatibility_date = "2024-05-29"
+name = "joshtech-frontend"
+compatibility_date = "2025-05-29"
 
 [build]
 command = "npx @cloudflare/next-on-pages"
 
 [build.environment]
-NODE_VERSION = "22.15.0" # Next.js 15은 Node 18 이상 권장
+NODE_VERSION = "20"
 
 [[deployments]]
 environment = "production"
