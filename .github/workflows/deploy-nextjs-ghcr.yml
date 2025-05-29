@@ -104,6 +104,6 @@ jobs:
             --s3-provider Cloudflare
 
       - name: 🚀 Deploy to Cloudflare Pages (with SSR)
-        run: wrangler pages deploy .vercel/output/static --project-name=joshtech-frontend --branch=main
+        run: wrangler pages deploy .vercel/output --project-name=joshtech-frontend --branch=main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}

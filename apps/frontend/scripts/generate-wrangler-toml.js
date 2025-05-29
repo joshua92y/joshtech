@@ -7,7 +7,7 @@ const compatibilityDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 const tomlContent = `
 name = "joshtech-frontend"
 compatibility_date = "${compatibilityDate}"
-pages_build_output_dir = ".vercel/output/static"
+pages_build_output_dir = ".vercel/output"
 compatibility_flags = ["nodejs_compat"]
 `.trim();
 
