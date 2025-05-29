@@ -34,7 +34,7 @@ jobs:
 
       - name: 🚀 Upgrade npm to latest
         run: npm install -g npm@latest
-        
+      
       - name: 🗂️ Cache NPM & Next.js build
         uses: actions/cache@v4
         with:
@@ -49,6 +49,9 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
+      - name: ⛅ Install Wrangler CLI
+        run: npm install -g wrangler
+      
       - name: Preload SWC
         run: npx next --version
       
