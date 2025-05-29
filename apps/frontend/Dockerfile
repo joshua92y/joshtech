@@ -35,7 +35,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.js ./
 #COPY --from=builder /app/.env.production ./
-COPY --from=builder /app/out ./
+COPY --from=builder /app/.vercel ./.vercel
 # Next.js 서버 포트
 EXPOSE 3000
 

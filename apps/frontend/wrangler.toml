@@ -1,11 +1,4 @@
 name = "joshtech-frontend"
 compatibility_date = "2025-05-29"
-
-[build]
-command = "npx @cloudflare/next-on-pages"
-
-[build.environment]
-NODE_VERSION = "20"
-
-[[deployments]]
-environment = "production"
+pages_build_output_dir = ".vercel/output/static"
+compatibility_flags = ["nodejs_compat"]
