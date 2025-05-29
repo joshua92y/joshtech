@@ -66,6 +66,7 @@ npm run lint
 npm run dev
 npx prettier --write .
 npm run lint --fix
+npx @cloudflare/next-on-pages # 클라우드 플레어 페이지스 펑션 사용하기 위해 한번더 빌드
 
 8.Chromium
 choco install chromium --pre #power shell
@@ -81,3 +82,8 @@ docker inspect worker #도커 상세 정보
 docker ps #활성화 도커 확인
 docker logs -f <이름># 로그 보는법
 docker exec -it <컨테이너\_ID_or_NAME> env
+
+10 WSL(npm run build 시 wsl 환경에서 해야함)
+wsl --list --verbose #설치된 wsl 리스트 확인
+wsl -d Ubuntu #환경 변경
+sudo apt update && sudo apt upgrade -y #패키지 업데이트

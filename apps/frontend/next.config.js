@@ -32,6 +32,7 @@ const baseConfig = {
     appDir: true, // ✅ App Router 사용 시
     serverActions: true, // ✅ 필요 시 활성화
   },
+  output: "standalone",
   turbopack: {
     rules: {
       "*.svg": ["@svgr/webpack"], // SVG만 명시적으로 설정

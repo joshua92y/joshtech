@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build",
+    "build": "npx prettier --write . && next build",
+    "cf:build": "npx @cloudflare/next-on-pages",
+    "deploy": "npm run build && npm run cf:build && wrangler pages deploy .vercel/output/static --project-name=joshuatech",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint . --ext .ts,.tsx --fix"
