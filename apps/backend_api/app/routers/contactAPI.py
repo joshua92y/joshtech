@@ -13,7 +13,7 @@ from datetime import datetime
 load_dotenv()
 router = APIRouter(prefix="/contact", tags=["Contact"])
 
-DJANGO_API_BASE = os.getenv("DJANGO_API_BASE")
+DJANGO_API_BASE = os.getenv("DJANGO_API_URL")
 DJANGO_API_BASE_CONTACT = f"{DJANGO_API_BASE}/api/contact"
 
 
