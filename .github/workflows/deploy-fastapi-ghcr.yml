@@ -107,6 +107,7 @@ jobs:
             R2_SECRET_KEY=${{ secrets.R2_SECRET_KEY }}
             DJANGO_API_URL=${{ secrets.DJANGO_API_URL }}
             PAGE_ACCESS_PASSWORD=${{ secrets.PAGE_ACCESS_PASSWORD }}
+            POSTMARK_API_KEY=${{ secrets.POSTMARK_API_KEY }}
             EOF
 
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
