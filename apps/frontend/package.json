@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
-    "wsl-build": "node scripts/generate-wrangler-toml.js && node scripts/wsl-build.js && wrangler pages deploy .vercel/output/static --project-name=joshtech-frontend --branch=main"
+    "wsl-build": "node scripts/generate-wrangler-toml.js && node scripts/wsl-build.js"
   },
   "dependencies": {
     "@eslint/config-array": "^0.20.0",

@@ -39,3 +39,9 @@ execSync("npm install", { stdio: "inherit" });
 
 console.log("⚡️ Cloudflare Next.js 빌드 실행");
 execSync("npx @cloudflare/next-on-pages", { stdio: "inherit" });
+
+console.log("🚀 Wrangler로 Cloudflare Pages 배포 실행!");
+execSync(
+  "wrangler pages deploy .vercel/output/static --project-name=joshtech-frontend --branch=main",
+  { stdio: "inherit" }
+);
