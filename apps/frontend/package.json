@@ -9,7 +9,8 @@
     "deploy": "npm run build && npm run cf:build && wrangler pages deploy .vercel/output/static --project-name=joshtech-frontend --branch=main",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "wsl-build": "node scripts/generate-wrangler-toml.js && node scripts/wsl-build.js && wrangler pages deploy .vercel/output/static --project-name=joshtech-frontend --branch=main"
   },
   "dependencies": {
     "@eslint/config-array": "^0.20.0",
@@ -61,8 +62,8 @@
     "eslint": "^9.26.0",
     "eslint-config-next": "^15.3.2",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-better-tailwindcss": "^3.1.0",
     "eslint-plugin-prettier": "^5.4.0",
-    "eslint-plugin-readable-tailwind": "^2.1.1",
     "postcss": "^8.5.3",
     "postcss-custom-media": "latest",
     "postcss-flexbugs-fixes": "latest",

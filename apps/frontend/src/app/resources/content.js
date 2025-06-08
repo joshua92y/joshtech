@@ -102,9 +102,12 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        I shape ideas into experiences, and connect possibilities to reality.
+        <br />
+        Hi, I&apos;m Joshua, a Full Stack Engineer at joshuatech, dedicated to building digital
+        solutions that resonate deeply with users. Beyond professional boundaries, I&apos;m always
+        experimenting with side projects, driven by curiosity and fueled by inspiration gathered
+        from new environments and experiences.
       </>
     ),
   },
@@ -113,18 +116,16 @@ const about = {
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "joshuatech",
+        timeframe: "2024 - Present",
+        role: "Full Stack Engineer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Building main backend services (Django), microservice backends (FastAPI), and caching
+            servers (Dragonfly) on Oracle servers, and developing a frontend using Next.js 15 on
+            Cloudflare. Utilizing Neon DB and Qdrant vector DB to create and manage databases.
           </>,
-          <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
-          </>,
+          <>This is joshuatech&apos;s main project to connect all platform services.</>,
         ],
         images: [
           // optional: leave the array empty if you don't want to display images
@@ -137,17 +138,14 @@ const about = {
         ],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "joshuatech",
+        timeframe: "2024 - Present",
+        role: "Full Stack Engineer",
         achievements: [
           <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
-          </>,
-          <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
+            Developing &quot;Tone Change&quot; application as a Full Stack Engineer using FastAPI on
+            Railway for backend and Flutter frontend deployed via GitHub. It analyzes and converts
+            users&apos; speech styles using AI.
           </>,
         ],
         images: [],
@@ -159,12 +157,12 @@ const about = {
     title: "Studies",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "AIX",
+        description: <>Completed a 6-month full stack engineering course.</>,
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Jangan University",
+        description: <>Majored in Distribution Management.</>,
       },
     ],
   },
@@ -173,8 +171,10 @@ const about = {
     title: "Technical skills",
     skills: [
       {
-        title: "Figma",
-        description: <>Able to prototype in Figma with Once UI with unnatural speed.</>,
+        title: "TensorFlow, PyTorch",
+        description: (
+          <>Quickly learns and extracts meaningful data using machine learning modules.</>
+        ),
         // optional: leave the array empty if you don't want to display images
         images: [
           {
@@ -192,8 +192,30 @@ const about = {
         ],
       },
       {
-        title: "Next.js",
-        description: <>Building next gen apps with Next.js + Once UI + Supabase.</>,
+        title: "Django, FastAPI",
+        description: (
+          <>
+            Efficiently creates optimized work using Python frameworks suitable for each scenario.
+          </>
+        ),
+        // optional: leave the array empty if you don't want to display images
+        images: [
+          {
+            src: "/images/projects/project-01/cover-04.jpg",
+            alt: "Project image",
+            width: 16,
+            height: 9,
+          },
+        ],
+      },
+      {
+        title: "Next.js, Flutter",
+        description: (
+          <>
+            Emphasizes SEO and user experience, leveraging marketing experience to increase
+            discoverability. Rapidly builds multi-platform MVPs using Flutter.
+          </>
+        ),
         // optional: leave the array empty if you don't want to display images
         images: [
           {
@@ -211,7 +233,7 @@ const about = {
 const blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
+  title: "Joshua’s Digital Playground",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route

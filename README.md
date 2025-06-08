@@ -83,7 +83,18 @@ docker ps #활성화 도커 확인
 docker logs -f <이름># 로그 보는법
 docker exec -it <컨테이너\_ID_or_NAME> env
 
-10 WSL(npm run build 시 wsl 환경에서 해야함)
-wsl --list --verbose #설치된 wsl 리스트 확인
-wsl -d Ubuntu #환경 변경
-sudo apt update && sudo apt upgrade -y #패키지 업데이트
+10. WSL(npm run build 시 wsl 환경에서 해야함)
+    wsl --list --verbose #설치된 wsl 리스트 확인
+    wsl --install -d Ubuntu # 우분투 환경 설정
+    wsl -d Ubuntu #환경 변경
+    wsl --set-default Ubuntu # 기본 접속경로 변경
+    sudo apt update && sudo apt upgrade -y #패키지 업데이트
+    cat /etc/os-release #OS환경 확인
+    wsl npm run wsl-build # 우분투 환경에서 클라우드 플레어 페이지스 펑션 사용하기 위해 모듈 빌드
+    sudo npm install -g wrangler #wrangler 설치
+
+11.Rust & Cargo 설치
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.bashrc
+sudo apt update
+sudo apt install build-essential -y

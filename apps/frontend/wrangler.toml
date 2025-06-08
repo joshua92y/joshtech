@@ -1,4 +1,4 @@
 name = "joshtech-frontend"
-compatibility_date = "2025-05-29"
-pages_build_output_dir = ".vercel/output/static"
+compatibility_date = "2025-06-08"
+pages_build_output_dir = ".vercel/output"
 compatibility_flags = ["nodejs_compat"]

@@ -6,6 +6,7 @@
 **/.next/
 **/out/
 .next/
+.vercel/
 frontend/out/
 # node.js 관련
 **/node_modules/
