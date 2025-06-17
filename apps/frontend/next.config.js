@@ -31,6 +31,7 @@ const baseConfig = {
     runtime: "edge", // ✅ Cloudflare Pages + Functions 필수
     appDir: true, // ✅ App Router 사용 시
     serverActions: true, // ✅ 필요 시 활성화
+    allowedDevOrigins: ['http://192.168.0.41:3000',"http://localhost:3000"],
   },
   output: "standalone",
   turbopack: {

@@ -5,6 +5,18 @@ from fastapi.responses import Response
 from dotenv import load_dotenv
 import os
 
+#--디버깅용 dev 셋팅 ---------------------------------------------------------------------
+import sys
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # backend_api
+SHARED_PATH = os.path.abspath(os.path.join(BASE_DIR, '../../packages/shared_schemas'))
+QUEUE_PATH = os.path.abspath(os.path.join(BASE_DIR, '../../packages/shared_queue'))
+
+if SHARED_PATH not in sys.path:
+    sys.path.insert(0, SHARED_PATH)
+    sys.path.insert(1, QUEUE_PATH)
+#---------------------------------------------------------------------------------------
+
 # ✅ 커스텀 미들웨어 및 유틸
 from .utils.scheduler import start as start_scheduler
 from .middleware.auth_middleware import AuthMiddleware

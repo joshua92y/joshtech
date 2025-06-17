@@ -20,6 +20,7 @@ urlpatterns = [
     path("healthz/", health_check, name="health_check"),
     path("api/r2/", include("R2_Storage.urls")),
     path("api/accounts/", include("accounts.urls")),
+    path("api/content/", include("content.urls")),
 ]
 # 🧱 Swagger/OpenAPI 문서용
 urlpatterns += [

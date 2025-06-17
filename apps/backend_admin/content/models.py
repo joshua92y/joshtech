@@ -10,11 +10,18 @@ formfield_overrides = {
 }
 
 class MarkdownPost(models.Model):
+    CONTENT_TYPES = [
+        ('work', 'Work'),
+        ('project', 'Project'),
+        ('post', 'Post'),
+        ('page', 'Page'),
+    ]
     # ✅ 콘텐츠 및 메타정보
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
     summary = models.TextField(blank=True, help_text="간단한 요약")
     content = models.TextField(help_text="마크다운 본문")
+    content_type =models.CharField(max_length=10, choices=CONTENT_TYPES)
 
     # ✅ 이미지, 링크, 태그
     image = models.URLField(blank=True, null=True, help_text="대표 이미지")

@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs-extra");
 
 // 원본(윈도우) 경로 & 대상(WSL 홈) 경로
-const SRC = "/mnt/c/code/AIX/joshtech/apps/frontend";
+const SRC = "/mnt/c/Users/Admin/Desktop/portfolio/apps/frontend";
 const DST = `${process.env.HOME}/frontend`;
 
 // 복사에서 제외할 경로(폴더/파일)

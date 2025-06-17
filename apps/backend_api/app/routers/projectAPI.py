@@ -5,7 +5,7 @@ from Project import Project
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
 
-@router.get("/projects", response_model=list[Project])
+@router.get("/list", response_model=list[Project])
 def get_projects():
     return [
         Project(
