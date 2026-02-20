@@ -1,100 +1,89 @@
-# joshtech
+# JoshuaTech — 포트폴리오 프로젝트 제안서
 
-dev.info
-#etc
-콘다환경 오버스팩으로 파이썬 환경으로 변경
---conda deactivate # 가상환경 종료
---conda remove --name admin-env --all # 가상환경 제거
-++ python -m venv venv #가상환경 셋팅
-++ .\venv\Scripts\activate #가상환경 실행
-deactivate # 가상환경 종료
-pip install -r requirements.txt #설치 pip
-pip freeze > requirements.txt #설치 pip 저장
+**Joshua | Full-Stack Developer | 2025**
 
-#개발서버
-uvicorn app.main:app --reload --port 8001 #8001번 포트 fastapi 서버런
-python manage.py runserver # 8000번 포트 django 서버런
-http://127.0.0.1:8001/docs #fastapi 관리페이지
-http://127.0.0.1:8000/admin # django admin 페이지
-http://127.0.0.1:8001/ # fastapi 페이지
-http://127.0.0.1:8000/ # django 페이지
+---
 
-pytest tests/ #api 테스트
+## 프로젝트 개요
 
-1. 아나콘다 개발 환경변수 셋팅
-   conda init # 콘다초기화
-   conda create -n admin-env python=3.11 #호완성 좋은 3.11 파이썬으로 셋팅
-   conda activate admin-env #콘다런
-   ->vs code 인터프린터 파이썬 가상환경으로 변경 Python: Select Interpreter → admin-env
+개인 포트폴리오 및 블로그 플랫폼을 처음부터 직접 설계·구축·운영한 풀스택 프로젝트.
+단순 토이 프로젝트가 아닌, **실 서비스 운영을 전제로 한 프로덕션 수준의 모노레포**.
 
-2.Django
-python manage.py startapp myapp #신규앱 생성
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser #슈퍼개정 생성
-python manage.py dbshell
-python manage.py flush #DB 초기화
-3.FastAPI
+| 항목 | 내용 |
+|------|------|
+| 개발 기간 | 약 1개월 (기획 → 설계 → 구현 → 배포 1인 전담) |
+| 서비스 형태 | 개인 포트폴리오 / 블로그 |
+| API 평균 응답 | 1.5초 이내 |
+| 업타임 | 99% |
 
-4.sync-schema (django와 fastapi 스키마 연동을 위한 자동화 프로그램)
-cd sync-schema # 자동화 프로그램 dir
-./sync-schema.sh # 유닉스 계열
-sync-schema.bat # 윈도우 더블클릭 or 실행
+---
 
-5.fly.io
-flyctl machine run registry.fly.io/joshtech-api:latest --app joshtech-api # fly.io에서 최초 앱 만들고 실행하여 머신 셋팅
-fly certs create joshtech-api.fly.dev -a joshtech-api #SSL 인증서 최초 발급
-fly ips allocate-v4 --shared -a joshtech-api #공유 ip 할당
-fly ips allocate-v6 #v6 할당
-flyctl status -a joshtech-api #api 서버가동 여부확인
-flyctl logs -a joshtech-api #api서버 로그 확인
-https://joshtech-api.fly.dev/docs #Swagger UI
+## 아키텍처
 
-6.render
-render 에서는 ssl 인증서 자동 발급
-render logs --resources srv-d0ao2a1r0fns73co2n90 로그확인
+```
+Next.js (Frontend)
+    ↓ REST API
+FastAPI (API Server)  ←→  Redis (Dragonfly)  ←→  Worker
+    ↓ Auth 위임
+Django Admin (DB 관리)
+    ↓
+PostgreSQL  +  Cloudflare R2 (파일 스토리지)
+```
 
-7.next.js
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-npx create-next-app@latest frontend
-npx npm-check-updates -u
-npm uninstall @humanwhocodes/object-schema
-npx shadcn@latest add button
-npm install
-npm run build
-npm run lint
-npm run dev
-npx prettier --write .
-npm run lint --fix
-npx @cloudflare/next-on-pages # 클라우드 플레어 페이지스 펑션 사용하기 위해 한번더 빌드
+**인프라**: OCI VM + Docker Compose + Traefik (리버스 프록시) + GitHub Actions CI/CD
 
-8.Chromium
-choco install chromium --pre #power shell
-C:\Program Files\Chromium\Application\chrome.exe 설치경로
+---
 
-9.OCI
-cat ./id_rsa | clip
-ssh -i .\id_rsa ubuntu@152.69.233.183 #fastapi
-ssh -i .\id_rsa ubuntu@158.180.87.55 #cache
-docker logs -f dragonfly
-docker run -it --rm ghcr.io/joshua92y/worker:latest bash # 도커 컨테이너 접속
-docker inspect worker #도커 상세 정보
-docker ps #활성화 도커 확인
-docker logs -f <이름># 로그 보는법
-docker exec -it <컨테이너\_ID_or_NAME> env
+## 핵심 기술 결정 3가지
 
-10. WSL(npm run build 시 wsl 환경에서 해야함)
-    wsl --list --verbose #설치된 wsl 리스트 확인
-    wsl --install -d Ubuntu # 우분투 환경 설정
-    wsl -d Ubuntu #환경 변경
-    wsl --set-default Ubuntu # 기본 접속경로 변경
-    sudo apt update && sudo apt upgrade -y #패키지 업데이트
-    cat /etc/os-release #OS환경 확인
-    wsl npm run wsl-build # 우분투 환경에서 클라우드 플레어 페이지스 펑션 사용하기 위해 모듈 빌드
-    sudo npm install -g wrangler #wrangler 설치
+### 1. Django + FastAPI 역할 분리
 
-11.Rust & Cargo 설치
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source ~/.bashrc
-sudo apt update
-sudo apt install build-essential -y
+단일 프레임워크 대신 두 백엔드를 목적별로 분리.
+
+- **Django Admin** — ORM, 마이그레이션, 관리자 UI 등 DB 직접 관리가 필요한 영역
+- **FastAPI** — 프론트엔드가 호출하는 기능 단위 API, MSA 구조로 독립 배포
+
+→ 각 프레임워크의 강점만 취하고 결합도를 최소화
+
+### 2. Redis 대신 Dragonfly 선택
+
+파일 삭제 큐(worker) 및 JWT 캐시에 Redis 호환 큐 사용.
+Dragonfly는 Redis 대비 멀티스레드 구조로 처리 성능이 우수하며,
+동일한 Redis 프로토콜을 사용하므로 코드 변경 없이 전환 가능.
+
+### 3. OCI 직접 운영 (Managed 서비스 대신)
+
+Vercel / Render 같은 플랫폼 대신 OCI Free Tier VM 기반 직접 운영 선택.
+
+- 향후 지오코딩, 지도 기반 기능 확장을 고려한 컴퓨팅 유연성 확보
+- Free Tier 기준 성능 대비 비용 효율이 가장 우수
+- Traefik으로 SSL 자동화 및 라우팅 직접 제어
+
+---
+
+## 문제 해결 사례
+
+**문제**: GitHub Actions 빌드·배포 시간이 15분 이상 소요 → 개발 사이클이 느려짐
+
+**원인 분석**: Docker 이미지 레이어 캐시 미적용, 단일 아키텍처 빌드
+
+**해결**:
+- GHA 캐시(`type=gha`) + BuildKit 레이어 캐시 전략 재구성
+- multi-arch(`linux/amd64, arm64`) 빌드 병렬화
+- 경로 기반 트리거로 변경된 앱만 빌드 (`paths:` 필터)
+
+**결과**: 빌드 시간 **15분 → 10분** (약 33% 단축)
+
+---
+
+## 기술 스택
+
+| 영역 | 기술 |
+|------|------|
+| Frontend | Next.js, TypeScript, Tailwind CSS, MDX |
+| Backend API | FastAPI, Pydantic |
+| Backend Admin | Django, Django REST Framework |
+| Queue / Worker | Dragonfly, Python async worker |
+| Storage | Cloudflare R2 (S3 호환) |
+| Infra | OCI, Docker, Traefik |
+| CI/CD | GitHub Actions, GHCR (멀티 아키텍처) |
