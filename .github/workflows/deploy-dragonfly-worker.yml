@@ -2,12 +2,6 @@
 name: Deploy Dragonfly + Worker
 
 on:
-  push:
-    paths:
-      - 'apps/worker/**'
-      - 'packages/shared_queue/**'
-      - 'infra/oci/dragonfly-worker-compose.yml'
-      - '.github/workflows/deploy-dragonfly-worker.yml'
   workflow_dispatch:
 
 jobs:
