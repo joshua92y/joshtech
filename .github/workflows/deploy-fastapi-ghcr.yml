@@ -2,14 +2,6 @@
 name: Build & Deploy FastAPI to GHCR and OCI
 
 on:
-  push:
-    paths:
-      - 'apps/backend_api/**'
-      - 'packages/shared_schemas/**'
-      - '.github/workflows/deploy-fastapi-ghcr.yml'
-      - 'infra/oci/docker-compose.yml'
-      - 'infra/oci/traefik/traefik.yml'
-      - 'infra/oci/traefik/traefik_dynamic.yml'
   workflow_dispatch:
 
 jobs:

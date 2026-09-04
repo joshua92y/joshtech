@@ -3,10 +3,6 @@
 name: Build → GHCR + R2 + Cloudflare Pages Deploy
 
 on:
-  push:
-    paths:
-      - 'apps/frontend/**'
-      - '.github/workflows/deploy-nextjs-ghcr.yml'
   workflow_dispatch: # ✅ 수동 실행 버튼 추가
 
 jobs:
